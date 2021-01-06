@@ -1,2 +1,1 @@
-# sera
-Semana de Engenharia e Robótica Aplicada
+# Projeto da Semana de Engenharia e Robótica Aplicada 
