@@ -11,6 +11,20 @@ class robotControl{
         robot_moves::get_float getFloat;
 
         ros::ServiceClient gpositionClient, positionClient, velocityClient;
+
+        //Funções para comunicação com o simulador
+        void getNameCallback(const std_msgs::String::ConstPtr &model){
+            robotName = model->data.c_str();
+            return;
+        }
+
+        bool sendPosition(std::string motor, float requisition){
+            sendRequisitionFloat.request.value = requisition;
+            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/"+motor+"/set_position");
+
+            return positionClient.call(sendRequisitionFloat);
+        }
+
     public:
         std::string robotName = " ";
 
@@ -26,23 +40,12 @@ class robotControl{
         }
 
         //Funções para o usuário
-        bool moveMotor(std::string motor){
+        bool moveMotor(std::string motor, bool request){
             gpositionClient = nh.serviceClient<robot_moves::get_float>(robotName+"/"+motor+"/get_target_position");
+            gpositionClient.call(getFloat);
 
-            return gpositionClient.call(getFloat);
-        }
-
-        //Funções para comunicação com o simulador
-        void getNameCallback(const std_msgs::String::ConstPtr &model){
-            robotName = model->data.c_str();
-            return;
-        }
-
-        bool sendPosition(std::string motor, float requisition){
-            sendRequisitionFloat.request.value = requisition;
-            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/"+motor+"/set_position");
-
-            return positionClient.call(sendRequisitionFloat);
+            getFloat.response.value += (request) ? 0.5 : -0.5;
+            return sendPosition(motor , getFloat.response.value);
         }
 };
 
@@ -50,13 +53,39 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "movementSimple_moves");
     robotControl *controller = new robotControl();
 
-    std::string motorReq = "braco_esq";
+    std::string motorReq;
+    char opc=' ';
 
-    std::cout << controller->robotName << std::endl;
-//    std::cout << "Motor desejado: ";
-//    std::cin >> motorReq;
+    do{
+        std::cin >> opc;
+        switch(opc){
+            case 'w':
+                opc = 'w';
+                motorReq = "roda_dir_fre";
+                controller->moveMotor(motorReq,1);
+                motorReq = "roda_dir_inf";
+                controller->moveMotor(motorReq,1);
+                motorReq = "roda_esq_fre";
+                controller->moveMotor(motorReq,1);
+                motorReq = "roda_esq_inf";
+                controller->moveMotor(motorReq,1);
+                break;
+            case 's':
+                opc = 's';
+                motorReq = "roda_dir_fre";
+                controller->moveMotor(motorReq,0);
+                motorReq = "roda_dir_inf";
+                controller->moveMotor(motorReq,0);
+                motorReq = "roda_esq_fre";
+                controller->moveMotor(motorReq,0);
+                motorReq = "roda_esq_inf";
+                controller->moveMotor(motorReq,0);
+                break;
+            default:
+                break;
+        }
 
-    std::cout << "A posição atual de " << motorReq << " requisitado eh: " << controller->moveMotor(motorReq) << std::endl;
+    }while(opc != 27);
 
     return 0;
 }

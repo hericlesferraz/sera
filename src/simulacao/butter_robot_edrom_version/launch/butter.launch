@@ -5,7 +5,7 @@
   <include file="$(find butter_robot_edrom_version)/launch/webots.launch">
     <arg name="mode" value="realtime"/>
     <arg name="no-gui" value="$(arg no-gui)"/>
-    <arg name="world" value="$(find butter_robot_edrom_version)/worlds/stl_to_wbt_butter_almost3_rick_and_morty.wbt"/>
+    <arg name="world" value="$(find butter_robot_edrom_version)/worlds/stl_to_wbt_butter_almost.wbt"/>
   </include>
 
   <arg name="auto-close" default="false" doc="Startup mode"/>
