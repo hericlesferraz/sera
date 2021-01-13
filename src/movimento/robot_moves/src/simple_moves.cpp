@@ -20,7 +20,7 @@ class robotControl{
 
         bool sendPosition(std::string motor, float requisition){
             sendRequisitionFloat.request.value = requisition;
-            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/"+motor+"/set_position");
+            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/motor_"+motor+"/set_position");
 
             return positionClient.call(sendRequisitionFloat);
         }
@@ -41,10 +41,10 @@ class robotControl{
 
         //Funções para o usuário
         bool moveMotor(std::string motor, bool request){
-            gpositionClient = nh.serviceClient<robot_moves::get_float>(robotName+"/"+motor+"/get_target_position");
+            gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/motor_"+motor+"/get_target_position");
             gpositionClient.call(getFloat);
 
-            getFloat.response.value += (request) ? 0.5 : -0.5;
+            getFloat.response.value += (request) ? 3.14 : -3.14;
             return sendPosition(motor , getFloat.response.value);
         }
 };
@@ -60,25 +60,33 @@ int main(int argc, char **argv){
         std::cin >> opc;
         switch(opc){
             case 'w':
-                opc = 'w';
-                motorReq = "roda_dir_fre";
+                motorReq = "esq_frente";
                 controller->moveMotor(motorReq,1);
-                motorReq = "roda_dir_inf";
+                motorReq = "esq_meio";
                 controller->moveMotor(motorReq,1);
-                motorReq = "roda_esq_fre";
+                motorReq = "esq_tras";
                 controller->moveMotor(motorReq,1);
-                motorReq = "roda_esq_inf";
+
+                motorReq = "dir_frente";
+                controller->moveMotor(motorReq,1);
+                motorReq = "dir_meio";
+                controller->moveMotor(motorReq,1);
+                motorReq = "dir_tras";
                 controller->moveMotor(motorReq,1);
                 break;
             case 's':
-                opc = 's';
-                motorReq = "roda_dir_fre";
+                motorReq = "esq_frente";
                 controller->moveMotor(motorReq,0);
-                motorReq = "roda_dir_inf";
+                motorReq = "esq_meio";
                 controller->moveMotor(motorReq,0);
-                motorReq = "roda_esq_fre";
+                motorReq = "esq_tras";
                 controller->moveMotor(motorReq,0);
-                motorReq = "roda_esq_inf";
+
+                motorReq = "dir_frente";
+                controller->moveMotor(motorReq,0);
+                motorReq = "dir_meio";
+                controller->moveMotor(motorReq,0);
+                motorReq = "dir_tras";
                 controller->moveMotor(motorReq,0);
                 break;
             default:
