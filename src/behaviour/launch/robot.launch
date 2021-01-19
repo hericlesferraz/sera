@@ -1,0 +1,5 @@
+<launch>
+
+ 	<node name="robot" pkg="state_machine" type="robot.py" output="screen" >   </node>
+
+</launch>

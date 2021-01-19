@@ -1,5 +1,7 @@
+# coding=utf-8
+
+import rospy
 from transitions import Machine
-import random
 
 class Robot(object):
 
@@ -26,9 +28,10 @@ class Robot(object):
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
 
     def start(self):
-        robot.wake_up()
+        print('Iniciou o método Start')
+        #INICIAR MÁQUINA DE ESTADOS
+        #LIGAR REDE NEURAL
         while not rospy.is_shutdown():
-            #LIGAR REDE NEURAL
             #SE TIVER ENCONTRADO MANTEIGA
                 #ROTACIONA ATÉ CENTRALIZAR A MENTEIGA NO CENTRO
                 #SE DESLOCA ATÉ A MANTEIGA UMA QUANTIDADE FIXA, E CONFERE SE JÁ ESTÁ PERTO O SUFICIENTE
@@ -36,8 +39,54 @@ class Robot(object):
                         #PASSA MANTEIGA
                     #SE NÃO ESTIVER PERTO
                         #VOLTA E ANDA A QUANTIDADE FIXA DNV E CONFERE DNV SE JÁ ESTÁ PERTO O SUFICIENTE
-            #SE NÃO TIVER ENCONTRADO MANTEIGA 
+            #SE NÃO TIVER ENCONTRADO MANTEIGA
                 #ROTACIONA PARA CONTINUAR PROCURANDO
+
+    #!MÉTODOS - MOVIMENTO
+    def move_forward():
+        #*Movimento para o robô se deslocar para frente
+        #CÓDIGO DO MOVIMENTO: 1
+        break
+
+    def walk_back():
+        #*Movimento para o robô se deslocar para trás
+        #CÓDIGO DO MOVIMENTO: 2
+        break
+
+    def rotate_time():
+        #*Movimento para o robô rotacionar em sentido horário
+        #CÓDIGO DO MOVIMENTO: 3
+        break
+
+    def rotate_counterclockwise():
+        #*Movimento para o robô rotacionar em sentido anti-horário
+        #CÓDIGO DO MOVIMENTO: 4
+        break
+    
+    def butter():
+        #*Movimento para o robô "passar manteiga"
+        #CÓDIGO DO MOVIMENTO: 5
+        break
+
+    #!MÉTODOS - VISÃO
+    def connect_neural_network():
+        #*Ligar a rede neural
+        break
+
+    def turn_off_neural_network():
+        #*Desligar a rede neural
+        break
+
+    def alignment():
+        #*Confere o alinhamento da manteiga em ralação ao centro da robô
+        break
+    
+    def close_enough():
+        #*Confere se a manteiga está perto o suficiente
+        break
+
+    
+
 
 
 
