@@ -2,6 +2,8 @@
 
 import rospy
 from transitions import Machine
+import os
+import time
 
 class Robot(object):
 
@@ -11,6 +13,15 @@ class Robot(object):
 
         # Define o nome do seu robô que passa manteiga!
         self.name = name
+
+        #Define vairáveis que serão utilizadas
+        self.x_centro = 0
+        self.y_centro = 0
+        self.roi_largura = 0
+        self.roi_altura = 0
+        self.manteiga_encontrada = False
+        self.rede_neural_ligada = False
+        self.movimento = -1
 
         # Iniciliza a maquina de estados
         self.machine = Machine(model=self, states=Robot.states, initial='ligar')
@@ -28,72 +39,100 @@ class Robot(object):
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
 
     def start(self):
-        print('Iniciou o método Start')
-        #INICIAR MÁQUINA DE ESTADOS
-        #LIGAR REDE NEURAL
-        while not rospy.is_shutdown():
-            #SE TIVER ENCONTRADO MANTEIGA
-                #ROTACIONA ATÉ CENTRALIZAR A MENTEIGA NO CENTRO
-                #SE DESLOCA ATÉ A MANTEIGA UMA QUANTIDADE FIXA, E CONFERE SE JÁ ESTÁ PERTO O SUFICIENTE
-                    #SE ESTIVER PERTO
-                        #PASSA MANTEIGA
-                    #SE NÃO ESTIVER PERTO
-                        #VOLTA E ANDA A QUANTIDADE FIXA DNV E CONFERE DNV SE JÁ ESTÁ PERTO O SUFICIENTE
-            #SE NÃO TIVER ENCONTRADO MANTEIGA
-                #ROTACIONA PARA CONTINUAR PROCURANDO
+        count = 1
+        #*Método que conterá toda a lógica do robô
+        os.system('clear') #Limpando o terminal
+        print('Iniciando behaviour...\n')
+        self.connect_neural_network() #Chamando método que liga a rede neural
+        while True:
+            time.sleep(2)
+            if(count == 2):
+                self.manteiga_encontrada = True
+                print('Manteiga encontrada\n')
+            count = count +1
+            if(self.manteiga_encontrada):
+                alignment = self.alignment() #Chamando método que retorna alinhamento da manteiga
+                if(alignment == 'direita'):
+                    self.rotate_time() #Chamando método que rotaciona a robô sentido horário
+                elif(alignment == 'esquerda'):
+                    self.rotate_counterclockwise() #Chamando método que rotaciona a robô sentido anti-horário
+                else:
+                    if(self.close_enough()):
+                        self.butter() #Chamando método que busca o movimento de passar manteiga
+                        self.turn_off_neural_network() #Chamando método que desliga a rede neural
+                        break
+                    else:
+                        self.move_forward() #Chamando método que se movimenta para frente
+                        pass
+            else:
+                print('Procurando manteiga..\n')
+                self.rotate_time() #Chamando método que rotaciona a robô sentido horário
+        
 
-    #!MÉTODOS - MOVIMENTO
-    def move_forward():
+    #!MÉTODOS MOVIMENTO 
+    def move_forward(self):
         #*Movimento para o robô se deslocar para frente
         #CÓDIGO DO MOVIMENTO: 1
-        break
+        self.roi_largura = self.roi_largura + 1 
+        print('Robô se movimento para frente\n')
 
-    def walk_back():
+    def walk_back(self):
         #*Movimento para o robô se deslocar para trás
         #CÓDIGO DO MOVIMENTO: 2
-        break
+        self.roi_largura = self.roi_largura - 1 
+        print('Robô se movimentando para trás\n')
 
-    def rotate_time():
+    def rotate_time(self):
         #*Movimento para o robô rotacionar em sentido horário
         #CÓDIGO DO MOVIMENTO: 3
-        break
+        self.x_centro = self.x_centro - 1
+        print('Robô rotacionando no sentido horário\n')
 
-    def rotate_counterclockwise():
+    def rotate_counterclockwise(self):
         #*Movimento para o robô rotacionar em sentido anti-horário
         #CÓDIGO DO MOVIMENTO: 4
-        break
+        self.x_centro = self.x_centro + 1
+        print('Robô rotacionando no sentido anti-horário\n')
     
-    def butter():
+    def butter(self):
         #*Movimento para o robô "passar manteiga"
         #CÓDIGO DO MOVIMENTO: 5
-        break
+        print('Robô passando manteiga\n')
 
     #!MÉTODOS - VISÃO
-    def connect_neural_network():
+    def connect_neural_network(self):
         #*Ligar a rede neural
-        break
+        print('Ligando rede neural\n')
+        self.rede_neural_ligada = True
 
-    def turn_off_neural_network():
+    def turn_off_neural_network(self):
         #*Desligar a rede neural
-        break
+        print('Desligando rede neural\n')
+        self.rede_neural_ligada = False
 
-    def alignment():
+    def alignment(self):
         #*Confere o alinhamento da manteiga em ralação ao centro da robô
-        break
+        if(self.x_centro > 0):
+            print('Alinhamento da manteiga para direita\n')
+            return 'direita'
+        elif(self.x_centro < 0):
+            print('Alinhamento da manteiga para esquerda\n')
+            return 'esquerda'
+        else:
+            print('Alinhamento da manteiga centralizado\n')
+            return 'centro'
+        
+
     
-    def close_enough():
+    def close_enough(self):
         #*Confere se a manteiga está perto o suficiente
-        break
-
-    
-
-
-
-
-
-if __name__ == '__main__':
-    passador_de_manteiga = Robot('Passador de Manteiga') #Inicia o construtor da classe
-    passador_de_manteiga.start() #Roda o método start
+        if(self.roi_largura > 5):
+            print('Manteiga perto o suficiente\n')
+            return True
+        else:
+            print('Manteiga não está perto o suficiente\n')
+            return False
 
 
-
+robot = Robot('passador de manteiga')
+robot.start()
