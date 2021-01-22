@@ -1,10 +1,10 @@
-#VRML_SIM R2020b utf8
+#VRML_SIM R2021a utf8
 WorldInfo {
   coordinateSystem "NUE"
 }
 Viewpoint {
-  orientation 0.015173122685904842 -0.9998811742965894 0.0027227991538039177 4.772977507577381
-  position 0.5895096875293321 0.10545982343593732 0.1362371195195979
+  orientation 0.016650332510061577 -0.9983303183979273 -0.055311317058964436 4.653513395183283
+  position 0.6163947196469424 0.03724337349228954 -0.07528942027115294
 }
 TexturedBackgroundLight {
 }
@@ -12,72 +12,100 @@ TexturedBackground {
 }
 Floor {
 }
-ButterV33 {
-  hidden position_0_0 -4.171038171278979e-13
-  hidden position_0_1 -8.758139725790289e-12
-  hidden position_0_2 -1.6889986976875738e-11
-  hidden position_0_3 49.99999999653518
-  hidden position_0_4 -4.3703379455807187e-10
-  hidden position_0_5 50.000000000001414
-  hidden position_0_6 -6.6481119583483885e-09
-  hidden translation_2 0.022519 0.014 0.002609
-  hidden rotation_2 1 0 0 1.2783000002983598
-  hidden translation_3 0.022519 0 0.002609
-  hidden rotation_3 0.9999999999999999 0 0 2.906399999899619
-  hidden translation_4 0.022519 -0.014 0.002609
-  hidden rotation_4 1 0 0 1.2823999998961249
-  hidden translation_5 0 0.014 0.002609
-  hidden translation_6 0 0 0.002609
-  hidden rotation_6 -1 0 0 0.7665399959927571
-  hidden translation_7 0 -0.014 0.002609
-  hidden translation_8 0 0 0.015609
-  hidden rotation_8 -1 0 0 1.5969000063099874
-  hidden position_8_0 0.7499999998034317
-  hidden position_8_1 -0.7499999993497429
-  hidden translation_9 -0.001484 -0.035426 0.00075
-  hidden rotation_9 -1.2146119416905893e-06 -0.3144004355135993 -0.9492904540483823 3.1415997722641906
-  hidden position_9_0 0.5200000000507564
-  hidden translation_10 0 -0.020029 -0.003879
-  hidden translation_11 0.026516 -0.035426 0.00075
-  hidden position_11_0 -0.5200000002026429
-  hidden translation_12 0 -0.020029 -0.003879
-  translation 0.00035350967593883627 0.003015830206307225 0.0314881010210699
-  rotation 0.9999937307599089 -0.002646563780666633 0.002352475511808458 -1.5594351370820225
-  controller "ros"
-  controllerArgs [
-    "--name=edrom_robot"
-  ]
-}
-DEF Butter_Collisionable Solid {
-  translation -0.00021257048460628265 0.0008976391964743424 0.10701279471253183
-  rotation -0.0011308342431138188 0.9999971123538975 0.0021204947019507966 0.0008882771992977573
-  scale 1.8 1.8 1.8
+DEF Butter_and_Container Solid {
+  translation -3.089897478505965e-10 -3.093517241248983e-06 3.05049499549348e-10
+  rotation 0.5206295799854898 0.01105954194864549 -0.8537110324787999 -2.5769254495551163e-06
   children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 1 0.8 0.4
-        roughness 1
-        metalness 0
-      }
-      geometry Mesh {
-        url [
-          "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/butter_v4.obj"
+    DEF Butter_Collisionable Solid {
+      translation 0 0.001 0
+      rotation -0.0011308342431138188 0.9999971123538975 0.0021204947019507966 0.0008882771992977573
+      scale 1.8 1.8 1.8
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0.8 0.4
+            roughness 1
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/butter_v4.obj"
+            ]
+          }
+        }
+      ]
+      boundingObject Transform {
+        translation 0.008 0.012 0.025
+        children [
+          Box {
+            size 0.06 0.025 0.095
+          }
         ]
+      }
+      physics Physics {
+        density 10
+        mass 0.001
+      }
+    }
+    DEF Container_Collisionable Solid {
+      scale 1.8 1.8 1.8
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.6 0.6 0.6
+            transparency 0.15
+            roughness 1
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/container_v1.obj"
+            ]
+          }
+        }
+      ]
+      name "solid_2"
+      boundingObject Mesh {
+        url [
+          "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/container_v1.obj"
+        ]
+      }
+      physics Physics {
+        density 10
+        mass 0.001
       }
     }
   ]
-  boundingObject Transform {
-    translation 0.008 0.012 0.025
-    children [
-      Box {
-        size 0.06 0.025 0.095
-      }
-    ]
-  }
+  name "solid(1)"
   physics Physics {
     density 10
     mass 0.001
   }
-  linearVelocity -2.360995389244192e-10 -7.890439483016083e-08 -1.9823235833191822e-07
-  angularVelocity -1.0488493927201543e-05 -5.609001124727274e-12 1.24942747449379e-08
+  linearVelocity -3.0365639377585183e-09 8.154242598539939e-06 5.503859006613486e-10
+  angularVelocity 5.2882310574633275e-08 2.939352855503528e-13 2.9176057548063443e-07
+}
+ButterV33 {
+  hidden position_0_0 8.29682998525859e-12
+  hidden position_0_1 -1.749337448354102e-11
+  hidden position_0_2 -2.563765623250227e-11
+  hidden position_0_3 49.99999999653658
+  hidden position_0_4 -4.3843321941706967e-10
+  hidden position_0_5 50.00000000088438
+  hidden position_0_6 -3.287278518256436e-09
+  hidden rotation_4 1 0 0 1.2823999998198177
+  hidden rotation_6 -1 0 0 0.7665399977422916
+  hidden rotation_7 -1 0 0 2.511899999117036
+  hidden rotation_8 -1 0 0 1.596900002949154
+  hidden position_8_0 0.7499999997117104
+  hidden position_8_1 -0.7499999992573819
+  hidden rotation_9 -1.2146119421406368e-06 -0.3144004356625703 -0.949290453999044 3.14159977226419
+  hidden position_9_0 0.5200000000739531
+  hidden rotation_11 1 0 0 2.100400000742618
+  hidden position_11_0 -0.5200000002253519
+  translation 4.812215318292581e-06 0.0031155349476012025 -0.19999811813023813
+  rotation 0.9999848133360203 -0.004034488139698428 0.003754464379284803 -1.5600452741122333
+  controller "ros"
+  controllerArgs [
+    "--name=edrom_robot"
+  ]
 }
