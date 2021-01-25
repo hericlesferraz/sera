@@ -20,7 +20,7 @@ class robotControl{
 
         bool sendPosition(std::string motor, float requisition){
             sendRequisitionFloat.request.value = requisition;
-            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/motor_"+motor+"/set_position");
+            positionClient = nh.serviceClient<robot_moves::set_float>(robotName+"/"+motor+"/set_position");
 
             return positionClient.call(sendRequisitionFloat);
         }
@@ -60,33 +60,25 @@ int main(int argc, char **argv){
         std::cin >> opc;
         switch(opc){
             case 'w':
-                motorReq = "esq_frente";
+                motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,1);
-                motorReq = "esq_meio";
-                controller->moveMotor(motorReq,1);
-                motorReq = "esq_tras";
+                motorReq = "wheel_left_back";
                 controller->moveMotor(motorReq,1);
 
-                motorReq = "dir_frente";
-                controller->moveMotor(motorReq,1);
-                motorReq = "dir_meio";
-                controller->moveMotor(motorReq,1);
-                motorReq = "dir_tras";
+                motorReq = "wheel_right_front";
+                controller->moveMotor(motorReq,0);
+                motorReq = "wheel_right_back";
                 controller->moveMotor(motorReq,1);
                 break;
             case 's':
-                motorReq = "esq_frente";
+                motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,0);
-                motorReq = "esq_meio";
-                controller->moveMotor(motorReq,0);
-                motorReq = "esq_tras";
+                motorReq = "wheel_left_back";
                 controller->moveMotor(motorReq,0);
 
-                motorReq = "dir_frente";
-                controller->moveMotor(motorReq,0);
-                motorReq = "dir_meio";
-                controller->moveMotor(motorReq,0);
-                motorReq = "dir_tras";
+                motorReq = "wheel_right_front";
+                controller->moveMotor(motorReq,1);
+                motorReq = "wheel_right_back";
                 controller->moveMotor(motorReq,0);
                 break;
             default:
