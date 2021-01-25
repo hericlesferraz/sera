@@ -5,6 +5,8 @@ from sensor_msgs.msg import Image as TipoMensagemImagem
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
+import running_inference as ri
+import time
 
 # Subscrevendo no tópico da câmera
 def listener():
@@ -14,13 +16,19 @@ def listener():
 
 # Função de callback
 def callback(data):
+    starting_time = time.time()
     bridge = CvBridge()
     cv_image = bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
     cv_image = cv2.resize(cv_image, (416, 416))
-    cv2.imwrite("current_frame.jpg", cv_image)
-    os.system("./darknet detector test data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_best.weights current_frame.jpg -ext_output")
-    predicoes = cv2.imread("predictions.jpg")
-    cv2.imshow("Camera", predicoes)
+    rede_configurada = ri.fazendo_blob_e_configurando_input(rede, cv_image)
+    frame = ri.rodando_rede(rede_configurada, camadas, cv_image)
+
+    #cv2.imwrite("current_frame.jpg", cv_image)
+    #os.system("./darknet detector test data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_best.weights current_frame.jpg -ext_output")
+    #predicoes = cv2.imread("predictions.jpg")
+    cv2.imshow("Camera", frame)
+    elapsed_time = time.time() - starting_time
+    print("FPS = {}".format(1/elapsed_time))
     cv2.waitKey(1)
     #print("O tipo da imagem é {}".format(type(cv_image)))
 
@@ -63,5 +71,6 @@ print(topicos[index_topico_camera])
 
 
 if __name__ == '__main__':
+    rede, camadas = ri.ler_rede()
     os.chdir(os.path.join(os.path.expanduser("~"), "darknet"))
     listener()
