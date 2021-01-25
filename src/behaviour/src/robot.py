@@ -38,36 +38,6 @@ class Robot(object):
         # Agora que o robô já está na manteiga, vamos pega-la
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
 
-    def start(self):
-        count = 1
-        #*Método que conterá toda a lógica do robô
-        os.system('clear') #Limpando o terminal
-        print('Iniciando behaviour...\n')
-        self.connect_neural_network() #Chamando método que liga a rede neural
-        while True:
-            time.sleep(2)
-            if(count == 2):
-                self.manteiga_encontrada = True
-                print('Manteiga encontrada\n')
-            count = count +1
-            if(self.manteiga_encontrada):
-                alignment = self.alignment() #Chamando método que retorna alinhamento da manteiga
-                if(alignment == 'direita'):
-                    self.rotate_time() #Chamando método que rotaciona a robô sentido horário
-                elif(alignment == 'esquerda'):
-                    self.rotate_counterclockwise() #Chamando método que rotaciona a robô sentido anti-horário
-                else:
-                    if(self.close_enough()):
-                        self.butter() #Chamando método que busca o movimento de passar manteiga
-                        self.turn_off_neural_network() #Chamando método que desliga a rede neural
-                        break
-                    else:
-                        self.move_forward() #Chamando método que se movimenta para frente
-                        pass
-            else:
-                print('Procurando manteiga..\n')
-                self.rotate_time() #Chamando método que rotaciona a robô sentido horário
-        
 
     #!MÉTODOS MOVIMENTO 
     def move_forward(self):
@@ -121,8 +91,6 @@ class Robot(object):
         else:
             print('Alinhamento da manteiga centralizado\n')
             return 'centro'
-        
-
     
     def close_enough(self):
         #*Confere se a manteiga está perto o suficiente
@@ -133,6 +101,57 @@ class Robot(object):
             print('Manteiga não está perto o suficiente\n')
             return False
 
+def main():
+    robot = Robot('passador de manteiga')
+    count = 1
+    while True:
+        
+        if(count < 3):
+            robot.manteiga_encontrada = True
 
-robot = Robot('passador de manteiga')
-robot.start()
+        time.sleep(2)
+        if(robot.state == 'ligar'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            print('Iniciando behaviour...\n')
+            robot.connect_neural_network() #Chamando método que liga a rede neural
+            robot.wake_up()
+
+        elif(robot.state == 'crise_existencial'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            print('Tendo uma crise existencial!\n')
+            robot.where_butter()
+
+        elif(robot.state == 'procurar_por_manteiga'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            print('Procurando manteiga..\n')
+            robot.rotate_time() #Chamando método que rotaciona a robô sentido horário
+            if(robot.manteiga_encontrada):
+                robot.seeking_the_butter()
+
+        elif(robot.state == 'buscar_manteiga'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            if(robot.alignment == 'direita'):
+                robot.rotate_time() #Chamando método que rotaciona a robô sentido horário
+            elif(robot.alignment == 'esquerda'):
+                robot.rotate_counterclockwise() #Chamando método que rotaciona a robô sentido anti-horário
+            else:
+                if(robot.close_enough()):
+                    robot.buterry()
+                else:
+                    robot.move_forward()
+
+        elif(robot.state == 'passar_manteiga'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            robot.butter() #Chamando método que busca o movimento de passar manteiga
+            robot.turn_off_neural_network() #Chamando método que desliga a rede neural
+            break
+        
+        else:
+            break
+
+main()
