@@ -4,6 +4,7 @@ import rospy
 from transitions import Machine
 import os
 import time
+import csv
 
 class Robot(object):
 
@@ -38,30 +39,45 @@ class Robot(object):
         # Agora que o robô já está na manteiga, vamos pega-la
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
 
+    def readCsv(self):
+        file = open('data.csv', 'r')
+        data = csv.reader(file)
+        for line in data:
+            if(line[0] == 'x_centro'):
+                self.x_centro = int(line[1])
+            if(line[0] == 'y_centro'):
+                self.y_centro = int(line[1])
+            if(line[0] == 'roi_largura'):
+                self.roi_largura = int(line[1])
+            if(line[0] == 'roi_altura'):
+                self.roi_altura = int(line[1])
+            if(line[0] == 'manteiga_encontrada'):
+                self.manteiga_encontrada = bool(line[1] == 'True')
+            if(line[0] == 'rede_neural_ligada'):
+                self.rede_neural_ligada = bool(line[1] == 'True')
+            if(line[0] == 'movimento'):
+                self.movimento = int(line[1])
+        file.close()
 
     #!MÉTODOS MOVIMENTO 
     def move_forward(self):
         #*Movimento para o robô se deslocar para frente
         #CÓDIGO DO MOVIMENTO: 1
-        self.roi_largura = self.roi_largura + 1 
         print('Robô se movimento para frente\n')
 
     def walk_back(self):
         #*Movimento para o robô se deslocar para trás
         #CÓDIGO DO MOVIMENTO: 2
-        self.roi_largura = self.roi_largura - 1 
         print('Robô se movimentando para trás\n')
 
     def rotate_time(self):
         #*Movimento para o robô rotacionar em sentido horário
         #CÓDIGO DO MOVIMENTO: 3
-        self.x_centro = self.x_centro - 1
         print('Robô rotacionando no sentido horário\n')
 
     def rotate_counterclockwise(self):
         #*Movimento para o robô rotacionar em sentido anti-horário
         #CÓDIGO DO MOVIMENTO: 4
-        self.x_centro = self.x_centro + 1
         print('Robô rotacionando no sentido anti-horário\n')
     
     def butter(self):
@@ -73,12 +89,10 @@ class Robot(object):
     def connect_neural_network(self):
         #*Ligar a rede neural
         print('Ligando rede neural\n')
-        self.rede_neural_ligada = True
 
     def turn_off_neural_network(self):
         #*Desligar a rede neural
         print('Desligando rede neural\n')
-        self.rede_neural_ligada = False
 
     def alignment(self):
         #*Confere o alinhamento da manteiga em ralação ao centro da robô
@@ -103,12 +117,8 @@ class Robot(object):
 
 def main():
     robot = Robot('passador de manteiga')
-    count = 1
     while True:
-        
-        if(count < 3):
-            robot.manteiga_encontrada = True
-
+        robot.readCsv()
         time.sleep(2)
         if(robot.state == 'ligar'):
             os.system('clear') #Limpando o terminal
@@ -134,9 +144,10 @@ def main():
         elif(robot.state == 'buscar_manteiga'):
             os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
-            if(robot.alignment == 'direita'):
+            alignment = robot.alignment()
+            if(alignment == 'direita'):
                 robot.rotate_time() #Chamando método que rotaciona a robô sentido horário
-            elif(robot.alignment == 'esquerda'):
+            elif(alignment == 'esquerda'):
                 robot.rotate_counterclockwise() #Chamando método que rotaciona a robô sentido anti-horário
             else:
                 if(robot.close_enough()):
