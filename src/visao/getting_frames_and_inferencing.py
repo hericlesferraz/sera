@@ -16,19 +16,21 @@ def listener():
 
 # Função de callback
 def callback(data):
+    (manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura) = (False, 0, 0, 0, 0) 
     starting_time = time.time()
     bridge = CvBridge()
     cv_image = bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
-    cv_image = cv2.resize(cv_image, (416, 416))
+    #cv_image = cv2.resize(cv_image, (416, 416))
     rede_configurada = ri.fazendo_blob_e_configurando_input(rede, cv_image)
-    frame = ri.rodando_rede(rede_configurada, camadas, cv_image)
+    frame, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura = ri.rodando_rede(rede_configurada, camadas, cv_image, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura)
 
     #cv2.imwrite("current_frame.jpg", cv_image)
     #os.system("./darknet detector test data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_best.weights current_frame.jpg -ext_output")
     #predicoes = cv2.imread("predictions.jpg")
     cv2.imshow("Camera", frame)
+    print("Manteiga = {}".format(manteiga_encontrada))
     elapsed_time = time.time() - starting_time
-    print("FPS = {}".format(1/elapsed_time))
+    #print("FPS = {}".format(1/elapsed_time))
     cv2.waitKey(1)
     #print("O tipo da imagem é {}".format(type(cv_image)))
 
@@ -44,7 +46,7 @@ print()
 ind = 0
 index_servico_camera = 0
 for servico in servicos:
-    if "camera/enable" in servico:
+    if "cam_Link/enable" in servico:
         index_servico_camera = ind
     ind += 1
 print("Fornecendo True para o serviço camera/enable:")
@@ -63,7 +65,7 @@ print()
 ind = 0
 index_topico_camera = 0
 for topico in topicos:
-    if "camera/image" in topico:
+    if "cam_Link/image" in topico:
         index_topico_camera = ind
     ind += 1
 print("Subscrevendo no tópico da câmera:")

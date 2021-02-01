@@ -1,0 +1,3 @@
+roslaunch butter_robot_v2 butter_scenario.launch
+
+python getting_frames_and_inferencing.py

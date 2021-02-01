@@ -10,6 +10,8 @@ for butter_robot_v2 robot</p>
   <maintainer email="TODO@email.com" />
   <license>BSD</license>
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
   <depend>roslaunch</depend>
   <depend>robot_state_publisher</depend>
   <depend>rviz</depend>

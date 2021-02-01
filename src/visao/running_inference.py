@@ -4,8 +4,8 @@ import numpy as np
 
 # Lendo a rede neural com o OpenCV
 def ler_rede():
-    os.chdir("Melhor CNN")
-    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_best.weights", "darknet")
+    os.chdir("Segunda Melhor CNN (primeira a ser feita)")
+    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_first_best.weights", "darknet")
     outNames = net.getUnconnectedOutLayersNames()
     os.chdir("..")
 
@@ -19,7 +19,7 @@ def fazendo_blob_e_configurando_input(net, image):
     return net
 
 
-def rodando_rede(net, output_layers, frame):
+def rodando_rede(net, output_layers, frame, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura):
     width, height = 416, 416
     classes = ["butter"]
     outs = net.forward(output_layers)
@@ -46,12 +46,13 @@ def rodando_rede(net, output_layers, frame):
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4, 0.3)
     for i in range(len(boxes)):
         if i in indexes:
+            manteiga_encontrada = True
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
             confidence = confidences[i]
             color = (255, 0, 0)
             cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-            cv2.rectangle(frame, (x, y), (x + w, y + 30), color, -1)
-            cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 30), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1)
+            cv2.rectangle(frame, (x, y), (x + w, y + 15), color, -1)
+            cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1)
     
-    return frame
+    return frame, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura
