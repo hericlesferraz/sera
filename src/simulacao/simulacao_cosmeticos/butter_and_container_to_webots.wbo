@@ -1,0 +1,71 @@
+#VRML_OBJ R2021a utf8
+DEF Butter_and_Container Solid {
+  translation 0 0.001 0
+  rotation 0.8813505088347715 0.006342617279734906 0.4724204184650916 -4.495081230670438e-06
+  children [
+    DEF Butter_Collisionable Solid {
+      translation 0 0.001 0
+      rotation -0.0011308342431138188 0.9999971123538975 0.0021204947019507966 0.0008882771992977573
+      scale 1.8 1.8 1.8
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 1 0.8 0.4
+            roughness 1
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/butter_v4.obj"
+            ]
+          }
+        }
+      ]
+      boundingObject Transform {
+        translation 0.008 0.012 0.025
+        children [
+          Box {
+            size 0.06 0.025 0.095
+          }
+        ]
+      }
+      physics Physics {
+        density 10
+        mass 0.001
+      }
+    }
+    DEF Container_Collisionable Solid {
+      scale 1.8 1.8 1.8
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.6 0.6 0.6
+            transparency 0.15
+            roughness 1
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/container_v1.obj"
+            ]
+          }
+        }
+      ]
+      name "solid_2"
+      boundingObject Mesh {
+        url [
+          "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/container_v1.obj"
+        ]
+      }
+      physics Physics {
+        density 10
+        mass 0.001
+      }
+    }
+  ]
+  name "solid(1)"
+  physics Physics {
+    density 10
+    mass 0.001
+  }
+}

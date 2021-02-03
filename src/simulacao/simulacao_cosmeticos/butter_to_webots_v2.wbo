@@ -1,0 +1,34 @@
+#VRML_OBJ R2020b utf8
+DEF Butter_Collisionable Solid {
+  translation -0.0002125770685821437 0.0008977378117430955 0.10777918180090675
+  rotation 0.0006578746504746878 0.9999997835996808 1.23926952360008e-06 0.0008884617662933577
+  scale 1.8 1.8 1.8
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0.8 0.4
+        roughness 1
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "/home/kirlin/sera/src/simulacao/simulacao_cosmeticos/butter_v4.obj"
+        ]
+      }
+    }
+  ]
+  boundingObject Transform {
+    translation 0.008 0.012 0.025
+    children [
+      Box {
+        size 0.06 0.025 0.095
+      }
+    ]
+  }
+  physics Physics {
+    density 10
+    mass 0.001
+  }
+  linearVelocity 1.4789793545770988e-10 -4.54031340797274e-11 -1.0274332305105241e-07
+  angularVelocity -4.566369392116617e-06 3.5276236309991622e-15 -6.573241404584052e-09
+}
