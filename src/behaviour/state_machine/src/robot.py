@@ -1,10 +1,14 @@
-# coding=utf-8
+#!/usr/bin/env python3
+
 
 import rospy
-from transitions import Machine
 import os
+
+from transitions import Machine
 import time
 import csv
+
+from state_machine.msg import Behav_mov
 
 class Robot(object):
 
@@ -14,6 +18,9 @@ class Robot(object):
 
         # Define o nome do seu robô que passa manteiga!
         self.name = name
+
+        #Define um Publisher (ROS)
+        self.pub = rospy.Publisher('state', Behav_mov, queue_size=100)
 
         #Define vairáveis que serão utilizadas
         self.x_centro = 0
@@ -53,36 +60,37 @@ class Robot(object):
                 self.roi_altura = int(line[1])
             if(line[0] == 'manteiga_encontrada'):
                 self.manteiga_encontrada = bool(line[1] == 'True')
-            if(line[0] == 'rede_neural_ligada'):
-                self.rede_neural_ligada = bool(line[1] == 'True')
-            if(line[0] == 'movimento'):
-                self.movimento = int(line[1])
         file.close()
+    
+    def publish(self):
+        msg_mov = Behav_mov()
+        msg_mov.move = self.movimento
+        self.pub.publish(msg_mov)
 
     #!MÉTODOS MOVIMENTO 
     def move_forward(self):
         #*Movimento para o robô se deslocar para frente
-        #CÓDIGO DO MOVIMENTO: 1
+        self.movimento = 1
         print('Robô se movimento para frente\n')
 
     def walk_back(self):
         #*Movimento para o robô se deslocar para trás
-        #CÓDIGO DO MOVIMENTO: 2
+        self.movimento = 2
         print('Robô se movimentando para trás\n')
 
     def rotate_time(self):
         #*Movimento para o robô rotacionar em sentido horário
-        #CÓDIGO DO MOVIMENTO: 3
+        self.movimento = 3
         print('Robô rotacionando no sentido horário\n')
 
     def rotate_counterclockwise(self):
         #*Movimento para o robô rotacionar em sentido anti-horário
-        #CÓDIGO DO MOVIMENTO: 4
+        self.movimento = 4
         print('Robô rotacionando no sentido anti-horário\n')
     
     def butter(self):
         #*Movimento para o robô "passar manteiga"
-        #CÓDIGO DO MOVIMENTO: 5
+        self.movimento = 5
         print('Robô passando manteiga\n')
 
     #!MÉTODOS - VISÃO
@@ -116,7 +124,11 @@ class Robot(object):
             return False
 
 def main():
+
+    rospy.init_node('state_node', anonymous=True)
+    rospy.spin()
     robot = Robot('passador de manteiga')
+    
     while True:
         robot.readCsv()
         time.sleep(2)
@@ -164,5 +176,5 @@ def main():
         
         else:
             break
-
+    
 main()
