@@ -7,5 +7,5 @@ centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: -1
 consoles: Console:All:All
-renderingDevicePerspectives: ButterRobotV2:cam_Link;1;0.360577;0;0
+renderingDevicePerspectives: ButterRobotV2:cam_Link;0;0.360577;0;0
 renderingDevicePerspectives: edrom_robot:cam_Link;1;0.4025;0;0

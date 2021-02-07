@@ -18,12 +18,11 @@ foreach(dir config launch meshes urdf)
 		DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach(dir)
 
-add_message_files(
-  FILES
-  visparabeh.msg
-)
+#add_message_files(
+  #FILES
+#)
 
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+#generate_messages(
+  #DEPENDENCIES
+  #std_msgs
+#)
