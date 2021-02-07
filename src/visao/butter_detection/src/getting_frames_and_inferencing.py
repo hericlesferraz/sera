@@ -21,23 +21,27 @@ def callback(data):
     starting_time = time.time()
     bridge = CvBridge()
     cv_image = bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
-    #cv_image = cv2.resize(cv_image, (416, 416))
     rede_configurada = ri.fazendo_blob_e_configurando_input(rede, cv_image)
     frame, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura = ri.rodando_rede(rede_configurada, camadas, cv_image)
 
-    #cv2.imwrite("current_frame.jpg", cv_image)
-    #os.system("./darknet detector test data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_best.weights current_frame.jpg -ext_output")
-    #predicoes = cv2.imread("predictions.jpg")
     cv2.imshow("Camera", frame)
-    print('''Manteiga = {}
-    x_centro = {}
-    y_centro = {}
-    roi_largura = {}
-    roi_altura = {}\n'''.format(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura))
+    send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura)
+    print('''Manteiga = {}\nx_centro = {}\ny_centro = {}\nroi_largura = {}\nroi_altura = {}\n'''.format(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura))
     elapsed_time = time.time() - starting_time
     print("FPS = {}\n".format(1/elapsed_time))
     cv2.waitKey(1)
-    #print("O tipo da imagem é {}".format(type(cv_image)))
+
+def send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura):
+    message_publisher = rospy.Publisher('visao_behaviour', visparabeh, queue_size = 100)
+
+    message = visparabeh()
+    message.manteiga_encontrada = manteiga_encontrada
+    message.x_centro = x_centro
+    message.y_centro = y_centro
+    message.roi_largura = roi_largura
+    message.roi_altura = roi_altura
+
+    message_publisher.publish(message)
 
 
 # Obtendo todos os serviços em funcionamento no momento
