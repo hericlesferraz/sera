@@ -41,7 +41,7 @@ class robotControl{
 
         //Funções para o usuário
         bool moveMotor(std::string motor, bool request){
-            gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/motor_"+motor+"/get_target_position");
+            gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/"+motor+"/get_target_position");
             gpositionClient.call(getFloat);
 
             getFloat.response.value += (request) ? 3.14 : -3.14;
@@ -63,23 +63,23 @@ int main(int argc, char **argv){
                 motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,1);
                 motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,1);
+                controller->moveMotor(motorReq,0);
 
                 motorReq = "wheel_right_front";
                 controller->moveMotor(motorReq,0);
                 motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,1);
+                controller->moveMotor(motorReq,0);
                 break;
             case 's':
                 motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,0);
                 motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,0);
+                controller->moveMotor(motorReq,1);
 
                 motorReq = "wheel_right_front";
                 controller->moveMotor(motorReq,1);
                 motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,0);
+                controller->moveMotor(motorReq,1);
                 break;
             default:
                 break;
