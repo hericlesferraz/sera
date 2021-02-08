@@ -44,7 +44,7 @@ class robotControl{
             gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/"+motor+"/get_target_position");
             gpositionClient.call(getFloat);
 
-            getFloat.response.value += (request) ? 3.14 : -3.14;
+            getFloat.response.value += (request) ? 3.14*20 : -3.14*20;
             return sendPosition(motor , getFloat.response.value);
         }
 };
@@ -63,7 +63,7 @@ int main(int argc, char **argv){
                 motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,1);
                 motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,0);
+                controller->moveMotor(motorReq,1);
 
                 motorReq = "wheel_right_front";
                 controller->moveMotor(motorReq,0);
@@ -74,7 +74,7 @@ int main(int argc, char **argv){
                 motorReq = "wheel_left_front";
                 controller->moveMotor(motorReq,0);
                 motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,1);
+                controller->moveMotor(motorReq,0);
 
                 motorReq = "wheel_right_front";
                 controller->moveMotor(motorReq,1);
