@@ -124,14 +124,13 @@ class Robot(object):
             return False
 
 def main():
-
+    
     rospy.init_node('state_node', anonymous=True)
     rospy.spin()
     robot = Robot('passador de manteiga')
-    
-    while True:
-        robot.readCsv()
-        time.sleep(2)
+
+    while not rospy.is_shutdown():
+        #robot.readCsv()
         if(robot.state == 'ligar'):
             os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
