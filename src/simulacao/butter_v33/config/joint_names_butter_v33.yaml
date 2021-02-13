@@ -1,0 +1,1 @@
+controller_joint_names: ['', 'motor_esq_tras', 'motor_esq_meio', 'motor_esq_frente', 'motor_dir_tras', 'motor_dir_meio', 'motor_dir_frente', 'motor_base', 'motor_ombro_dir', 'motor_mao_dir', 'motor_ombro_esq_link', 'motor_mao_esq', ]

@@ -1,0 +1,12 @@
+./darknet detector train build/darknet/x64/data/obj.data yolov4-tiny-obj.cfg yolov4-tiny.conv.29 -map
+
+
+./darknet detector train data/obj.data yolov4-tiny-obj.cfg yolov4-tiny.conv.29 -map
+
+
+./darknet detector train data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_last.weights -map
+
+
+
+############### Avaliação (pelo melhor modelo de todos)
+./darknet detector test data/obj.data yolov4-tiny-obj.cfg backup/yolov4-tiny-obj_best.weights eval_15.jpg -ext_output
