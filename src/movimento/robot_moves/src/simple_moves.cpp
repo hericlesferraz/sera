@@ -9,6 +9,8 @@ class robotControl{
         ros::NodeHandle nh;
         robot_moves::set_float sendRequisitionFloat;
         robot_moves::get_float getFloat;
+        float mode;
+        int opc;
 
         ros::ServiceClient gpositionClient, positionClient, velocityClient;
 
@@ -36,6 +38,16 @@ class robotControl{
             }
             getName.shutdown();
 
+            std::cout << "Modo brusco [1]  ou  Modo Suave [2]" << std::endl;
+            std::cout << "(Testes Visão)          (Testes Bhv)" << std::endl;
+            std::cin >> opc;
+
+            if(opc==1){
+                mode = 3.14;
+            }else{
+                mode = 0.628;
+            }
+
             getFloat.request.ask = false;
         }
 
@@ -44,7 +56,7 @@ class robotControl{
             gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/"+motor+"/get_target_position");
             gpositionClient.call(getFloat);
 
-            getFloat.response.value += (request) ? 3.14 : -3.14;
+            getFloat.response.value += (request) ? mode: -mode;
             return sendPosition(motor , getFloat.response.value);
         }
 };

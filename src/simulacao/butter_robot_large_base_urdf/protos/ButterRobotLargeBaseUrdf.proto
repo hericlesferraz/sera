@@ -46,6 +46,13 @@ PROTO ButterRobotLargeBaseUrdf [
           creaseAngle 1
         }
       }
+      Camera {
+        name "cam_Link"
+        fieldOfView 1.396263
+        width 416
+        height 416
+        noise 0.007000
+      }
       HingeJoint {
         jointParameters HingeJointParameters {
           axis -1.000000 0.000007 -0.000000
