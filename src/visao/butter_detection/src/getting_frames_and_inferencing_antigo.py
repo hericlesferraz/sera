@@ -33,10 +33,7 @@ def callback(data, primeira_iteracao):
         last_seven_roi_altura = np.full(7, 0, dtype = np.int16)
         primeira_iteracao = False
 
-    manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura = ri.rodando_rede(rede_configurada, camadas)
-
-    last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura = ri.organizando_array(last_seven_manteiga_encontrada, manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura)
-    frame, last_seven_manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura)
+    frame, manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura = ri.rodando_rede(rede_configurada, camadas, cv_image)
 
     cv2.imshow("Camera", frame)
     send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura)
