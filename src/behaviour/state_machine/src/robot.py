@@ -20,7 +20,7 @@ class Robot(object):
         self.name = name
 
         #Define um Publisher (ROS)
-        self.pub = rospy.Publisher('state', Behav_mov, queue_size=100)
+        self.pubMov = rospy.Publisher('behaviour_movimento', Behav_mov, queue_size=100)
 
         #Define vairáveis que serão utilizadas
         self.x_centro = 0
@@ -62,10 +62,11 @@ class Robot(object):
                 self.manteiga_encontrada = bool(line[1] == 'True')
         file.close()
     
-    def publish(self):
+    #!PUBLISHER AND SUBSCRIBER
+    def publishToMov(self):
         msg_mov = Behav_mov()
         msg_mov.move = self.movimento
-        self.pub.publish(msg_mov)
+        self.pubMov.publish(msg_mov)
 
     #!MÉTODOS MOVIMENTO 
     def move_forward(self):
@@ -126,11 +127,12 @@ class Robot(object):
 def main():
     
     rospy.init_node('state_node', anonymous=True)
-    rospy.spin()
+    #rospy.spin()
     robot = Robot('passador de manteiga')
 
     while not rospy.is_shutdown():
-        #robot.readCsv()
+        robot.publishToMov()
+        robot.readCsv()
         if(robot.state == 'ligar'):
             os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
