@@ -9,10 +9,11 @@ import time
 import csv
 
 from state_machine.msg import Behav_mov
+from state_machine.msg import Behav_vis
 
 class Robot(object):
 
-    states = ['ligar', 'crise_existencial', 'procurar_por_manteiga', 'buscar_manteiga', 'passar_manteiga']
+    states = ['ligar', 'crise_existencial', 'procurar_por_manteiga', 'buscar_manteiga', 'passar_manteiga', 'desligar']
 
     def __init__(self, name):
 
@@ -21,6 +22,7 @@ class Robot(object):
 
         #Define um Publisher (ROS)
         self.pubMov = rospy.Publisher('behaviour_movimento', Behav_mov, queue_size=100)
+        self.pubVis = rospy.Publisher('behaviour_visao', Behav_vis, queue_size=100)
 
         #Define vairáveis que serão utilizadas
         self.x_centro = 0
@@ -28,8 +30,8 @@ class Robot(object):
         self.roi_largura = 0
         self.roi_altura = 0
         self.manteiga_encontrada = False
-        self.rede_neural_ligada = False
-        self.movimento = -1
+        self.rede_neural_ligada = False 
+        self.movimento = -1 #PUBLICADO
 
         # Iniciliza a maquina de estados
         self.machine = Machine(model=self, states=Robot.states, initial='ligar')
@@ -45,6 +47,10 @@ class Robot(object):
 
         # Agora que o robô já está na manteiga, vamos pega-la
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
+        
+        #Agora que o robô concluiu seu objetivo, vamos desliga-lo
+        self.machine.add_transition(trigger='sleep', source='passar_manteiga', dest='desligar')
+
 
     def readCsv(self):
         file = open('data.csv', 'r')
@@ -67,6 +73,12 @@ class Robot(object):
         msg_mov = Behav_mov()
         msg_mov.move = self.movimento
         self.pubMov.publish(msg_mov)
+
+    def publishToVis(self):
+        print(self.rede_neural_ligada)
+        msg_vis = Behav_vis()
+        msg_vis.rede_neural_ligada = self.rede_neural_ligada
+        self.pubVis.publish(msg_vis)
 
     #!MÉTODOS MOVIMENTO 
     def move_forward(self):
@@ -97,10 +109,12 @@ class Robot(object):
     #!MÉTODOS - VISÃO
     def connect_neural_network(self):
         #*Ligar a rede neural
+        self.rede_neural_ligada = True
         print('Ligando rede neural\n')
 
     def turn_off_neural_network(self):
         #*Desligar a rede neural
+        self.rede_neural_ligada = False
         print('Desligando rede neural\n')
 
     def alignment(self):
@@ -127,17 +141,17 @@ class Robot(object):
 def main():
     
     rospy.init_node('state_node', anonymous=True)
-    #rospy.spin()
     robot = Robot('passador de manteiga')
-
     while not rospy.is_shutdown():
-        robot.publishToMov()
         robot.readCsv()
+        robot.publishToMov()
+        robot.publishToVis()
         if(robot.state == 'ligar'):
             os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             print('Iniciando behaviour...\n')
             robot.connect_neural_network() #Chamando método que liga a rede neural
+            time.sleep(3)
             robot.wake_up()
 
         elif(robot.state == 'crise_existencial'):
@@ -173,6 +187,13 @@ def main():
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             robot.butter() #Chamando método que busca o movimento de passar manteiga
             robot.turn_off_neural_network() #Chamando método que desliga a rede neural
+            robot.sleep()
+        
+        elif(robot.state == 'desligar'):
+            os.system('clear') #Limpando o terminal
+            print('------ESTADO ATUAL:' + robot.state + '------\n\n')
+            print('Objetivo concluído!')
+            time.sleep(3)
             break
         
         else:
