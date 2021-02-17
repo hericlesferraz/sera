@@ -4,20 +4,82 @@
 #include "robot_moves/set_float.h"
 #include "robot_moves/get_float.h"
 
+#include "robot_moves/Behav_mov.h"
+
 class robotControl{
     private:
         ros::NodeHandle nh;
+        ros::ServiceClient gpositionClient, positionClient, velocityClient;
+        ros::Subscriber behav2Mov;
+
         robot_moves::set_float sendRequisitionFloat;
         robot_moves::get_float getFloat;
-        float mode;
-        int opc;
 
-        ros::ServiceClient gpositionClient, positionClient, velocityClient;
+        std::string motorReq;
 
         //Funções para comunicação com o simulador
         void getNameCallback(const std_msgs::String::ConstPtr &model){
             robotName = model->data.c_str();
             return;
+        }
+
+        void behav2MovCallback(const std_msgs::String::ConstPtr &req){
+            switch(req->move){
+                case "move_forward":
+                    motorReq = "wheel_left_front";
+                    moveMotor(motorReq,1);
+                    motorReq = "wheel_left_back";
+                    moveMotor(motorReq,1);
+
+                    motorReq = "wheel_right_front";
+                    moveMotor(motorReq,0);
+                    motorReq = "wheel_right_back";
+                    moveMotor(motorReq,0);
+                    break;
+
+                case "walk_back":
+                    motorReq = "wheel_left_front";
+                    moveMotor(motorReq,0);
+                    motorReq = "wheel_left_back";
+                    moveMotor(motorReq,0);
+
+                    motorReq = "wheel_right_front";
+                    moveMotor(motorReq,1);
+                    motorReq = "wheel_right_back";
+                    moveMotor(motorReq,1);
+                    break;
+
+                case "rotate_clockwise":
+                    motorReq = "wheel_left_front";
+                    moveMotor(motorReq,1);
+                    motorReq = "wheel_left_back";
+                    moveMotor(motorReq,1);
+
+                    motorReq = "wheel_right_front";
+                    moveMotor(motorReq,1);
+                    motorReq = "wheel_right_back";
+                    moveMotor(motorReq,1);
+                    break;
+
+                case "rotate_counterclockwise":
+                    motorReq = "wheel_left_front";
+                    moveMotor(motorReq,0);
+                    motorReq = "wheel_left_back";
+                    moveMotor(motorReq,0);
+
+                    motorReq = "wheel_right_front";
+                    moveMotor(motorReq,0);
+                    motorReq = "wheel_right_back";
+                    moveMotor(motorReq,0);
+                    break;
+                
+                case "page_catchbutter":
+                    break;
+                
+                default:
+                    break;
+            }
+
         }
 
         bool sendPosition(std::string motor, float requisition){
@@ -30,7 +92,7 @@ class robotControl{
     public:
         std::string robotName = " ";
 
-        //Construtor para inicializar o objeto e receber o nome aleatório do robô
+        //Construtor para inicializar o objeto, receber o nome aleatório do robô e iniciar comunicação com o Behavior
         robotControl(){
             ros::Subscriber getName = nh.subscribe("model_name", 100, &robotControl::getNameCallback, this);
             while(robotName == " "){
@@ -38,17 +100,9 @@ class robotControl{
             }
             getName.shutdown();
 
-            std::cout << "Modo brusco [1]  ou  Modo Suave [2]" << std::endl;
-            std::cout << "(Testes Visão)          (Testes Bhv)" << std::endl;
-            std::cin >> opc;
-
-            if(opc==1){
-                mode = 3.14;
-            }else{
-                mode = 0.628;
-            }
-
             getFloat.request.ask = false;
+
+            behav2Mov = nh.subscribe("behaviour_movimento", 100, &robotControl::behav2MovCallback, this);
         }
 
         //Funções para o usuário
@@ -56,7 +110,7 @@ class robotControl{
             gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/"+motor+"/get_target_position");
             gpositionClient.call(getFloat);
 
-            getFloat.response.value += (request) ? mode: -mode;
+            getFloat.response.value += (request) ? 0.628 : -0.628;
             return sendPosition(motor , getFloat.response.value);
         }
 };
@@ -65,62 +119,7 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "movementSimple_moves");
     robotControl *controller = new robotControl();
 
-    std::string motorReq;
-    char opc=' ';
-
-    do{
-        std::cin >> opc;
-        switch(opc){
-            case 'w':
-                motorReq = "wheel_left_front";
-                controller->moveMotor(motorReq,1);
-                motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,1);
-
-                motorReq = "wheel_right_front";
-                controller->moveMotor(motorReq,0);
-                motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,0);
-                break;
-            case 's':
-                motorReq = "wheel_left_front";
-                controller->moveMotor(motorReq,0);
-                motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,0);
-
-                motorReq = "wheel_right_front";
-                controller->moveMotor(motorReq,1);
-                motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,1);
-                break;
-            case 'd':
-                motorReq = "wheel_left_front";
-                controller->moveMotor(motorReq,1);
-                motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,1);
-
-                motorReq = "wheel_right_front";
-                controller->moveMotor(motorReq,1);
-                motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,1);
-                break;
-            case 'a':
-                motorReq = "wheel_left_front";
-                controller->moveMotor(motorReq,0);
-                motorReq = "wheel_left_back";
-                controller->moveMotor(motorReq,0);
-
-                motorReq = "wheel_right_front";
-                controller->moveMotor(motorReq,0);
-                motorReq = "wheel_right_back";
-                controller->moveMotor(motorReq,0);
-                break;
-            
-            default:
-                break;
-        }
-
-    }while(opc != 27);
+    ros::spin();
 
     return 0;
 }
