@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs message_generation)
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
-   Behav_mov.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -63,6 +62,10 @@ include_directories(
 add_executable(simple_moves src/simple_moves.cpp)
 add_dependencies(simple_moves robot_moves_generate_messages_cpp)
 target_link_libraries(simple_moves ${catkin_LIBRARIES})
+
+add_executable(test_publisher  src/test_publisher.cpp)
+add_dependencies(test_publisher  robot_moves_generate_messages_cpp)
+target_link_libraries(test_publisher  ${catkin_LIBRARIES})
 
 #############
 ## Install ##

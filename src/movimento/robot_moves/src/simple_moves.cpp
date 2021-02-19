@@ -14,8 +14,10 @@ robotControl::robotControl()
     commandAssociation.insert(std::pair<std::string,int>("walk_back",2));
     commandAssociation.insert(std::pair<std::string,int>("rotate_clockwise",3));
     commandAssociation.insert(std::pair<std::string,int>("rotate_counterclockwise",4));
+    commandAssociation.insert(std::pair<std::string,int>("move_butter",5));
+    commandAssociation.insert(std::pair<std::string,int>("init_position",6));
 
-    behav2Mov = nh.subscribe("behaviour_movimento", 100, &robotControl::behav2MovCallback, this);
+    behav2Mov = nh.subscribe("behaviour_movimento", 1000, &robotControl::behav2MovCallback, this);
 }
 
 void robotControl::getNameCallback(const std_msgs::String::ConstPtr &model)
@@ -25,7 +27,7 @@ void robotControl::getNameCallback(const std_msgs::String::ConstPtr &model)
 }
 
 void robotControl::behav2MovCallback(const std_msgs::String::ConstPtr &req)
-{
+{ 
     switch(commandAssociation[req->data]){
         case 1:
             moveWheels(req->data);
@@ -38,6 +40,12 @@ void robotControl::behav2MovCallback(const std_msgs::String::ConstPtr &req)
             break;
         case 4:
             moveWheels(req->data);
+            break;
+        case 5:
+            pageExecution(req->data);
+            break;
+        case 6:
+            pageExecution(req->data);
             break;
         default:
             break;
@@ -55,7 +63,7 @@ bool robotControl::sendPosition(std::string motor, float requisition)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "movementSimple_moves");
-    robotControl controller();
+    robotControl *controller = new robotControl();
 
     ros::spin();
 
