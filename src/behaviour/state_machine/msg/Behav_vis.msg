@@ -1,0 +1,1 @@
+bool rede_neural_ligada

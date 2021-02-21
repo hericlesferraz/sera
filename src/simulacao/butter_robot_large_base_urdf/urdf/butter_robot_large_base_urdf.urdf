@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="butter_robot_large_base_urdf">
+  <link
+    name="base_Link">
+    <inertial>
+      <origin
+        xyz="-0.0487232105091282 9.86708571078072E-18 -0.012438289278278"
+        rpy="0 0 0" />
+      <mass
+        value="0.00536932262414497" />
+      <inertia
+        ixx="5.76073435531915E-07"
+        ixy="7.69640473213972E-23"
+        ixz="-1.77124924292863E-24"
+        iyy="6.28079123541929E-07"
+        iyz="2.23922421133806E-23"
+        izz="1.06817976925242E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/base_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/base_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="wheel_right_front_Link">
+    <inertial>
+      <origin
+        xyz="0.0025 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.00061825" />
+      <inertia
+        ixx="1.3933E-08"
+        ixy="4.9828E-26"
+        ixz="7.5136E-25"
+        iyy="8.2245E-09"
+        iyz="4.1359E-25"
+        izz="8.2245E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_right_front_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_right_front_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_right_front"
+    type="continuous">
+    <origin
+      xyz="-0.065223 -0.008 -0.013582"
+      rpy="2.2394 0 -3.1416" />
+    <parent
+      link="base_Link" />
+    <child
+      link="wheel_right_front_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="wheel_right_back_Link">
+    <inertial>
+      <origin
+        xyz="0.0025 3.4694E-18 3.4694E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.00061825" />
+      <inertia
+        ixx="1.3933E-08"
+        ixy="3.4466E-26"
+        ixz="1.2063E-26"
+        iyy="8.2245E-09"
+        iyz="-5.5101E-40"
+        izz="8.2245E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_right_back_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_right_back_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_right_back"
+    type="continuous">
+    <origin
+      xyz="-0.065223 0.008 -0.013582"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="base_Link" />
+    <child
+      link="wheel_right_back_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="wheel_left_front_Link">
+    <inertial>
+      <origin
+        xyz="-0.0025 3.4694E-18 1.7347E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.00061825" />
+      <inertia
+        ixx="1.3933E-08"
+        ixy="-1.1954E-26"
+        ixz="3.7929E-25"
+        iyy="8.2245E-09"
+        iyz="-8.2718E-25"
+        izz="8.2245E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_left_front_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_left_front_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_left_front"
+    type="continuous">
+    <origin
+      xyz="-0.027223 -0.008 -0.013582"
+      rpy="0.90215 0 0" />
+    <parent
+      link="base_Link" />
+    <child
+      link="wheel_left_front_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="wheel_left_back_Link">
+    <inertial>
+      <origin
+        xyz="-0.0025 1.7347E-18 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.00061825" />
+      <inertia
+        ixx="1.3933E-08"
+        ixy="-1.3471E-40"
+        ixz="-2.2403E-26"
+        iyy="8.2245E-09"
+        iyz="2.4414E-40"
+        izz="8.2245E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_left_back_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/wheel_left_back_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel_left_back"
+    type="continuous">
+    <origin
+      xyz="-0.027223 0.008 -0.013582"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_Link" />
+    <child
+      link="wheel_left_back_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="body_Link">
+    <inertial>
+      <origin
+        xyz="0.00220693674438502 0.0320703435807592 -0.0140672326178452"
+        rpy="0 0 0" />
+      <mass
+        value="0.0127431330344777" />
+      <inertia
+        ixx="1.70373736671612E-06"
+        ixy="-4.63670921931001E-08"
+        ixz="-3.654343695758E-10"
+        iyy="1.28530353698776E-06"
+        iyz="-3.00714102204925E-09"
+        izz="1.26968266182564E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/body_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/body_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="body"
+    type="continuous">
+    <origin
+      xyz="-0.0349732105091282 0 0.000417721518987318"
+      rpy="1.5707963267949 -0.118795737316981 1.5707963267949" />
+    <parent
+      link="base_Link" />
+    <child
+      link="body_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="shoulder_right_Link">
+    <inertial>
+      <origin
+        xyz="0.0015036 -0.0076028 -0.0014824"
+        rpy="0 0 0" />
+      <mass
+        value="0.0003663" />
+      <inertia
+        ixx="1.9617E-08"
+        ixy="-2.8097E-10"
+        ixz="-5.4783E-11"
+        iyy="2.4276E-09"
+        iyz="-3.1007E-09"
+        izz="1.7725E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/shoulder_right_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/shoulder_right_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shoulder_right"
+    type="continuous">
+    <origin
+      xyz="0.005958 0.034944 -0.029"
+      rpy="0.094339 1.5708 0" />
+    <parent
+      link="body_Link" />
+    <child
+      link="shoulder_right_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="elbow_right_Link">
+    <inertial>
+      <origin
+        xyz="-0.003135 -0.0052602 -0.002"
+        rpy="0 0 0" />
+      <mass
+        value="0.00022263" />
+      <inertia
+        ixx="3.0633E-09"
+        ixy="-1.3711E-09"
+        ixz="6.6593E-25"
+        iyy="1.5798E-09"
+        iyz="9.0757E-25"
+        izz="3.8759E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/elbow_right_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/elbow_right_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="elbow_right"
+    type="continuous">
+    <origin
+      xyz="-0.0005 -0.019685 -0.0038383"
+      rpy="-1.5708 -1.1945 1.5708" />
+    <parent
+      link="shoulder_right_Link" />
+    <child
+      link="elbow_right_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="hand_right_Link">
+    <inertial>
+      <origin
+        xyz="0.00025313 -0.0022198 -0.002"
+        rpy="0 0 0" />
+      <mass
+        value="3.858E-05" />
+      <inertia
+        ixx="1.8961E-10"
+        ixy="1.5885E-11"
+        ixz="1.0028E-26"
+        iyy="6.8502E-11"
+        iyz="-5.7587E-26"
+        izz="1.7563E-10" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/hand_right_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/hand_right_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hand_right"
+    type="continuous">
+    <origin
+      xyz="-0.0076793 -0.012885 0"
+      rpy="0 0 -0.76629" />
+    <parent
+      link="elbow_right_Link" />
+    <child
+      link="hand_right_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="shoulder_left_Link">
+    <inertial>
+      <origin
+        xyz="0.0020036 -0.0076028 -0.0014824"
+        rpy="0 0 0" />
+      <mass
+        value="0.0003663" />
+      <inertia
+        ixx="1.9617E-08"
+        ixy="-2.8097E-10"
+        ixz="-5.4783E-11"
+        iyy="2.4276E-09"
+        iyz="-3.1007E-09"
+        izz="1.7725E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/shoulder_left_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/shoulder_left_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shoulder_left"
+    type="continuous">
+    <origin
+      xyz="0.005958 0.034944 0.0005"
+      rpy="2.7902 -1.5708 0" />
+    <parent
+      link="body_Link" />
+    <child
+      link="shoulder_left_Link" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="elbow_left_Link">
+    <inertial>
+      <origin
+        xyz="0.0038899 -0.0047293 -0.002"
+        rpy="0 0 0" />
+      <mass
+        value="0.00022263" />
+      <inertia
+        ixx="2.6224E-09"
+        ixy="1.5296E-09"
+        ixz="1.2457E-24"
+        iyy="2.0208E-09"
+        iyz="-1.4104E-24"
+        izz="3.8759E-09" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/elbow_left_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/elbow_left_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="elbow_left"
+    type="continuous">
+    <origin
+      xyz="0 -0.019685 -0.0038383"
+      rpy="1.5708 -0.65141 -1.5708" />
+    <parent
+      link="shoulder_left_Link" />
+    <child
+      link="elbow_left_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="hand_left_Link">
+    <inertial>
+      <origin
+        xyz="0.0010846 -0.0016774 0.0025"
+        rpy="0 0 0" />
+      <mass
+        value="3.858E-05" />
+      <inertia
+        ixx="1.8996E-10"
+        ixy="1.4476E-11"
+        ixz="-2.8606E-26"
+        iyy="6.815E-11"
+        iyz="3.822E-26"
+        izz="1.7563E-10" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/hand_left_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/hand_left_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hand_left"
+    type="continuous">
+    <origin
+      xyz="0.010493 -0.011265 0.0005"
+      rpy="3.1416 0 -2.2547" />
+    <parent
+      link="elbow_left_Link" />
+    <child
+      link="hand_left_Link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="cam_Link">
+    <inertial>
+      <origin
+        xyz="-1.3739E-15 4.9703E-14 0.0038501"
+        rpy="0 0 0" />
+      <mass
+        value="0.0014224" />
+      <inertia
+        ixx="2.9163E-08"
+        ixy="-3.6477E-25"
+        ixz="-1.0602E-21"
+        iyy="2.9163E-08"
+        iyz="3.8305E-20"
+        izz="4.5044E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/cam_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://butter_robot_large_base_urdf/meshes/cam_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="cam"
+    type="fixed">
+    <origin
+      xyz="-0.011888 0.037292 -0.01405"
+      rpy="1.5708 -1.5431 -1.7044" />
+    <parent
+      link="body_Link" />
+    <child
+      link="cam_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
