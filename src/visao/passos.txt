@@ -8,3 +8,9 @@ python getting_frames_and_inferencing.py
 source devel/setup.bash
 roslaunch butter_robot_v2 butter_scenario.launch
 rosrun butter_detection getting_frames_and_inferencing.py
+
+
+============================ATUALIZADO:=============================
+source devel/setup.bash
+roslaunch butter_robot_large_base_urdf butter.launch
+rosrun butter_detection getting_frames_and_inferencing.py

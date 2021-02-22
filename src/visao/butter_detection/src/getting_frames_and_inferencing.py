@@ -14,29 +14,48 @@ import numpy
 # Subscrevendo no tópico da câmera
 def listener():
     rospy.init_node('recebeImagemWebots', anonymous = True)
+
     primeira_iteracao = True
-    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=primeira_iteracao)  
+
+    global last_seven_manteiga_encontrada
+    global last_seven_x_centro
+    global last_seven_y_centro
+    global last_seven_roi_largura
+    global last_seven_roi_altura
+
+    last_seven_manteiga_encontrada = np.full(7, False)
+    last_seven_x_centro = np.full(7, 0, dtype = np.int16)
+    last_seven_y_centro = np.full(7, 0, dtype = np.int16)
+    last_seven_roi_largura = np.full(7, 0, dtype = np.int16)
+    last_seven_roi_altura = np.full(7, 0, dtype = np.int16)
+
+    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura))  
     rospy.spin()
 
 # Função de callback
-def callback(data, primeira_iteracao):
+def callback(data, tuple):
+    primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura = tuple[:]
     starting_time = time.time()
     bridge = CvBridge()
     cv_image = bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
     rede_configurada = ri.fazendo_blob_e_configurando_input(rede, cv_image)
 
+    '''
     if primeira_iteracao == True:
         last_seven_manteiga_encontrada = np.full(7, False)
         last_seven_x_centro = np.full(7, 0, dtype = np.int16)
         last_seven_y_centro = np.full(7, 0, dtype = np.int16)
         last_seven_roi_largura = np.full(7, 0, dtype = np.int16)
         last_seven_roi_altura = np.full(7, 0, dtype = np.int16)
-        primeira_iteracao = False
+        primeira_iteracao = False'''
 
     manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura = ri.rodando_rede(rede_configurada, camadas)
 
     last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura = ri.organizando_array(last_seven_manteiga_encontrada, manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura)
     frame, last_seven_manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura)
+
+    print(last_seven_manteiga_encontrada)
+    print(last_seven_x_centro)
 
     cv2.imshow("Camera", frame)
     send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura)
@@ -98,4 +117,5 @@ print(topicos[index_topico_camera])
 if __name__ == '__main__':
     rede, camadas = ri.ler_rede()
     os.chdir(os.path.join(os.path.expanduser("~"), "darknet"))
+
     listener()

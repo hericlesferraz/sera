@@ -61,31 +61,23 @@ def rodando_rede(net, output_layers):
     return manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura
 
 def organizando_array(last_seven_manteiga_encontrada, manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura):
-    last_att_manteiga_encontrada = np.full(7, False)
-    last_att_x_centro = np.full(7, 0, dtype = np.int16)
-    last_att_y_centro = np.full(7, 0, dtype = np.int16)
-    last_att_roi_largura = np.full(7, 0, dtype = np.int16)
-    last_att_roi_altura = np.full(7, 0, dtype = np.int16)
-    
-    last_att_manteiga_encontrada[:-1] = last_seven_manteiga_encontrada[1:].copy()
-    last_att_manteiga_encontrada[-1] = manteiga_encontrada
+   
+    last_seven_manteiga_encontrada[:-1] = last_seven_manteiga_encontrada[1:]
+    last_seven_manteiga_encontrada[-1] = manteiga_encontrada
 
-    last_att_x_centro[:-1] = last_seven_x_centro[1:].copy()
-    last_att_x_centro[-1] = x_centro
-    print(last_seven_x_centro)
-    print(x_centro)
-    print(last_att_x_centro)
+    last_seven_x_centro[:-1] = last_seven_x_centro[1:]
+    last_seven_x_centro[-1] = x_centro
 
-    last_att_y_centro[:-1] = last_seven_y_centro[1:].copy()
-    last_att_y_centro[-1] = y_centro
+    last_seven_y_centro[:-1] = last_seven_y_centro[1:]
+    last_seven_y_centro[-1] = y_centro
 
-    last_att_roi_largura[:-1] = last_seven_roi_largura[1:].copy()
-    last_att_roi_largura[-1] = roi_largura
+    last_seven_roi_largura[:-1] = last_seven_roi_largura[1:]
+    last_seven_roi_largura[-1] = roi_largura
 
-    last_att_roi_altura[:-1] = last_seven_roi_altura[1:].copy()
-    last_att_roi_altura[-1] = roi_altura
+    last_seven_roi_altura[:-1] = last_seven_roi_altura[1:]
+    last_seven_roi_altura[-1] = roi_altura
 
-    return last_att_manteiga_encontrada, last_att_x_centro, last_att_y_centro, last_att_roi_largura, last_att_roi_altura
+    return last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura
 
 def fazendo_media_e_desenhando_bb(frame, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura):
     # Se um dos sete valores para manteiga_encontrada for True
