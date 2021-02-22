@@ -47,23 +47,23 @@ def callback(data, tuple):
     manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura, label, confidence = ri.rodando_rede(rede_configurada, camadas, label, confidence)
 
     last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura = ri.organizando_array(last_fourteen_manteiga_encontrada, manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura)
-    frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence)
+    frame, last_fourteen_manteiga_encontrada, manteiga_na_bounding_box, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence)
 
     print(last_fourteen_manteiga_encontrada)
     print(last_fourteen_x_centro)
 
     cv2.imshow("Camera", frame)
-    send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura)
+    send_message(manteiga_na_bounding_box, x_centro, y_centro, roi_largura, roi_altura)
     print('''Manteiga = {}\nx_centro = {}\ny_centro = {}\nroi_largura = {}\nroi_altura = {}\n'''.format(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura))
     elapsed_time = time.time() - starting_time
     print("FPS = {}\n".format(1/elapsed_time))
     cv2.waitKey(1)
 
-def send_message(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura):
+def send_message(manteiga_na_bounding_box, x_centro, y_centro, roi_largura, roi_altura):
     message_publisher = rospy.Publisher('visao_behaviour', visparabeh, queue_size = 100)
 
     message = visparabeh()
-    message.manteiga_encontrada = manteiga_encontrada
+    message.manteiga_encontrada = manteiga_na_bounding_box
     message.x_centro = x_centro
     message.y_centro = y_centro
     message.roi_largura = roi_largura

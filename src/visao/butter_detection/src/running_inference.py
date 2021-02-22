@@ -78,7 +78,7 @@ def organizando_array(last_fourteen_manteiga_encontrada, manteiga_encontrada, la
 def fazendo_media_e_desenhando_bb(frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence):
     # Se um dos sete valores para manteiga_encontrada for True
     if np.any(last_fourteen_manteiga_encontrada[:] == True) == True:
-        #manteiga_encontrada = True
+        manteiga_na_bounding_box = True
 
         selecao_x_centro = last_fourteen_x_centro.copy()
         selecao_x_centro = selecao_x_centro[selecao_x_centro >= 0]
@@ -110,6 +110,6 @@ def fazendo_media_e_desenhando_bb(frame, last_fourteen_manteiga_encontrada, last
 
         cv2.putText(frame, label + " " + confidence, (x, y + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1)
     
-        return frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura
+        return frame, last_fourteen_manteiga_encontrada, manteiga_na_bounding_box, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura
 
-    return frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, -1, last_fourteen_y_centro, -1, last_fourteen_roi_largura, -1, last_fourteen_roi_altura, -1
+    return frame, last_fourteen_manteiga_encontrada, False, last_fourteen_x_centro, -1, last_fourteen_y_centro, -1, last_fourteen_roi_largura, -1, last_fourteen_roi_altura, -1
