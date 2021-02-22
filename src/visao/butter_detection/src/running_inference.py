@@ -20,7 +20,7 @@ def fazendo_blob_e_configurando_input(net, image):
     return net
 
 
-def rodando_rede(net, output_layers):
+def rodando_rede(net, output_layers, label, confidence):
     (manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura) = (False, -1, -1, -1, -1) 
     width, height = 416, 416
     classes = ["butter"]
@@ -52,45 +52,41 @@ def rodando_rede(net, output_layers):
             x, y, w, h = boxes[i]
             label = str(classes[class_ids[i]])
             confidence = confidences[i]
-            #color = (255, 0, 0)
-            #cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-            #cv2.rectangle(frame, (x, y), (x + w, y + 15), color, -1)
             x_centro, y_centro, roi_largura, roi_altura = int(x + w/2), int(y + h/2), w, h
-            #cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1)
     
-    return manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura
+    return manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura, label, confidence
 
-def organizando_array(last_seven_manteiga_encontrada, manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura):
+def organizando_array(last_fourteen_manteiga_encontrada, manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura):
    
-    last_seven_manteiga_encontrada[:-1] = last_seven_manteiga_encontrada[1:]
-    last_seven_manteiga_encontrada[-1] = manteiga_encontrada
+    last_fourteen_manteiga_encontrada[:-1] = last_fourteen_manteiga_encontrada[1:]
+    last_fourteen_manteiga_encontrada[-1] = manteiga_encontrada
 
-    last_seven_x_centro[:-1] = last_seven_x_centro[1:]
-    last_seven_x_centro[-1] = x_centro
+    last_fourteen_x_centro[:-1] = last_fourteen_x_centro[1:]
+    last_fourteen_x_centro[-1] = x_centro
 
-    last_seven_y_centro[:-1] = last_seven_y_centro[1:]
-    last_seven_y_centro[-1] = y_centro
+    last_fourteen_y_centro[:-1] = last_fourteen_y_centro[1:]
+    last_fourteen_y_centro[-1] = y_centro
 
-    last_seven_roi_largura[:-1] = last_seven_roi_largura[1:]
-    last_seven_roi_largura[-1] = roi_largura
+    last_fourteen_roi_largura[:-1] = last_fourteen_roi_largura[1:]
+    last_fourteen_roi_largura[-1] = roi_largura
 
-    last_seven_roi_altura[:-1] = last_seven_roi_altura[1:]
-    last_seven_roi_altura[-1] = roi_altura
+    last_fourteen_roi_altura[:-1] = last_fourteen_roi_altura[1:]
+    last_fourteen_roi_altura[-1] = roi_altura
 
-    return last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura
+    return last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura
 
-def fazendo_media_e_desenhando_bb(frame, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura):
+def fazendo_media_e_desenhando_bb(frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence):
     # Se um dos sete valores para manteiga_encontrada for True
-    if np.any(last_seven_manteiga_encontrada[:] == True) == True:
+    if np.any(last_fourteen_manteiga_encontrada[:] == True) == True:
         #manteiga_encontrada = True
 
-        selecao_x_centro = last_seven_x_centro.copy()
+        selecao_x_centro = last_fourteen_x_centro.copy()
         selecao_x_centro = selecao_x_centro[selecao_x_centro >= 0]
-        selecao_y_centro = last_seven_y_centro.copy()
+        selecao_y_centro = last_fourteen_y_centro.copy()
         selecao_y_centro = selecao_y_centro[selecao_y_centro >= 0]
-        selecao_roi_largura = last_seven_roi_largura.copy()
+        selecao_roi_largura = last_fourteen_roi_largura.copy()
         selecao_roi_largura = selecao_roi_largura[selecao_roi_largura >= 0]
-        selecao_roi_altura = last_seven_roi_altura.copy()
+        selecao_roi_altura = last_fourteen_roi_altura.copy()
         selecao_roi_altura = selecao_roi_altura[selecao_roi_altura >= 0]
 
         x_centro = int(np.mean(selecao_x_centro))
@@ -104,11 +100,16 @@ def fazendo_media_e_desenhando_bb(frame, last_seven_manteiga_encontrada, last_se
         x = int(x_centro - w/2)
         y = int(y_centro - h/2)
 
-        #print(last_seven_x_centro, last_seven_y_centro)
-        #print(x, y, w, h)
         cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
         cv2.rectangle(frame, (x, y), (x + w, y + 15), color, -1)
-    
-        return frame, last_seven_manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura
 
-    return frame, last_seven_manteiga_encontrada, last_seven_x_centro, -1, last_seven_y_centro, -1, last_seven_roi_largura, -1, last_seven_roi_altura, -1
+        confidence = str(round(float(confidence), 2))
+
+        if last_fourteen_manteiga_encontrada[-1] == False:
+            confidence = ""
+
+        cv2.putText(frame, label + " " + confidence, (x, y + 15), cv2.FONT_HERSHEY_PLAIN, 1, (255,255,255), 1)
+    
+        return frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura
+
+    return frame, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, -1, last_fourteen_y_centro, -1, last_fourteen_roi_largura, -1, last_fourteen_roi_altura, -1
