@@ -44,10 +44,10 @@ class Robot(object):
         self.machine.add_transition(trigger='wake_up', source='ligar', dest='crise_existencial')
 
         # Após finalizar a crise existencial, ele deve procurar pela manteiga
-        self.machine.add_transition(trigger='where_butter', source='crise_existencial', dest='procurar_por_manteiga')
+        self.machine.add_transition(trigger='where_butter', source='*', dest='procurar_por_manteiga')
 
         # Após saber a localização da manteiga, ele deve chegar até a manteiga
-        self.machine.add_transition(trigger='seeking_the_butter', source='procurar_por_manteiga', dest='buscar_manteiga')
+        self.machine.add_transition(trigger='seeking_the_butter', source='*', dest='buscar_manteiga')
 
         # Agora que o robô já está na manteiga, vamos pega-la
         self.machine.add_transition(trigger='buterry', source='buscar_manteiga', dest='passar_manteiga')
@@ -143,13 +143,25 @@ class Robot(object):
             print('Manteiga não está perto o suficiente\n')
             return False
 
+    def checkEssentialParam(self):
+        if(self.manteiga_encontrada == False):
+            if(self.state == 'ligar' or self.state == 'crise_existencial'):
+                pass
+            else:
+                self.where_butter()
+        elif(self.alignment() != 'centro' or self.close_enough() == False):
+            self.seeking_the_butter()
+        else:
+            pass
+
 #*MÉTODO QUE EXECUTA TODA A LÓGICA DO BEHAVIOUR
 def brain():
     robot = Robot('passador de manteiga')
     while not rospy.is_shutdown():
-        robot.publishToMov()
-        robot.publishToVis()
-        robot.toString()
+        robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
+        robot.publishToMov() #Publicando variáveis para o movimento
+        robot.publishToVis() #Publicando variáveis para a visão
+        robot.toString() #Exibindo no terminal as variáveis
         if(robot.state == 'ligar'):
             os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
