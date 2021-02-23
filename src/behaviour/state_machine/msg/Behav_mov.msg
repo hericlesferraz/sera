@@ -1,1 +1,1 @@
-int32 move
+string move

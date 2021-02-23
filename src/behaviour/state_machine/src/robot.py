@@ -35,7 +35,7 @@ class Robot(object):
         self.roi_altura = 0
         self.manteiga_encontrada = False
         self.rede_neural_ligada = False 
-        self.movimento = -1 #PUBLICADO
+        self.movimento = 'init_position'
 
         # Iniciliza a maquina de estados
         self.machine = Machine(model=self, states=Robot.states, initial='ligar')
@@ -55,7 +55,7 @@ class Robot(object):
         #Agora que o robô concluiu seu objetivo, vamos desliga-lo
         self.machine.add_transition(trigger='sleep', source='passar_manteiga', dest='desligar')
 
-    #!MÉTODO QUE EXIBE NO TERMINAL TODAS OS PARÂMETROS
+    #*MÉTODO QUE EXIBE NO TERMINAL TODAS OS PARÂMETROS
     def toString(self):
         print('Posicão da Manteiga: (' + str(self.x_centro) + ',' + str(self.y_centro) + ')')
         print('Largura da Manteiga: ' + str(self.roi_largura))
@@ -64,7 +64,7 @@ class Robot(object):
         print('Rede Neural Liga: ' + str(self.rede_neural_ligada))
         print('Movimento sendo executado: ' + str(self.movimento))
 
-    #!SUBSCRIBER DA VISÃO
+    #*SUBSCRIBER DA VISÃO
     def visionCallback(self, msg):
         self.x_centro = msg.x_centro
         self.y_centro = msg.y_centro
@@ -72,46 +72,46 @@ class Robot(object):
         self.roi_altura = msg.roi_altura
         self.manteiga_encontrada = msg.manteiga_encontrada
     
-    #!PUBLISHER PARA O MOVIMENTO
+    #*PUBLISHER PARA O MOVIMENTO
     def publishToMov(self):
         msg_mov = Behav_mov()
         msg_mov.move = self.movimento
         self.pubMov.publish(msg_mov)
 
-    #!PUBLISHER PARA A VISÃO
+    #*PUBLISHER PARA A VISÃO
     def publishToVis(self):
         print(self.rede_neural_ligada)
         msg_vis = Behav_vis()
         msg_vis.rede_neural_ligada = self.rede_neural_ligada
         self.pubVis.publish(msg_vis)
 
-    #!MÉTODOS MOVIMENTO 
+    #*MÉTODOS MOVIMENTO 
     def move_forward(self):
         #*Movimento para o robô se deslocar para frente
-        self.movimento = 1
+        self.movimento = 'move_forward'
         print('Robô se movimento para frente\n')
 
     def walk_back(self):
         #*Movimento para o robô se deslocar para trás
-        self.movimento = 2
+        self.movimento = 'walk_back'
         print('Robô se movimentando para trás\n')
 
     def rotate_time(self):
         #*Movimento para o robô rotacionar em sentido horário
-        self.movimento = 3
+        self.movimento = 'rotate_clockwise'
         print('Robô rotacionando no sentido horário\n')
 
     def rotate_counterclockwise(self):
         #*Movimento para o robô rotacionar em sentido anti-horário
-        self.movimento = 4
+        self.movimento = 'rotate_counterclockwise'
         print('Robô rotacionando no sentido anti-horário\n')
     
     def butter(self):
         #*Movimento para o robô "passar manteiga"
-        self.movimento = 5
+        self.movimento = 'move_butter'
         print('Robô passando manteiga\n')
 
-    #!MÉTODOS - VISÃO
+    #*MÉTODOS - VISÃO
     def connect_neural_network(self):
         #*Ligar a rede neural
         self.rede_neural_ligada = True
@@ -143,7 +143,7 @@ class Robot(object):
             print('Manteiga não está perto o suficiente\n')
             return False
 
-#!MÉTODO QUE EXECUTA TODA A LÓGICA DO BEHAVIOUR
+#*MÉTODO QUE EXECUTA TODA A LÓGICA DO BEHAVIOUR
 def brain():
     robot = Robot('passador de manteiga')
     while not rospy.is_shutdown():
