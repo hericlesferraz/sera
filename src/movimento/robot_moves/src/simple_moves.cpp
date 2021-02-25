@@ -17,7 +17,7 @@ robotControl::robotControl()
     commandAssociation.insert(std::pair<std::string,int>("move_butter",5));
     commandAssociation.insert(std::pair<std::string,int>("init_position",6));
 
-    behav2Mov = nh.subscribe("behaviour_movimento", 1000, &robotControl::behav2MovCallback, this);
+    behav2Mov = nh.subscribe("behaviour_movimento", 10, &robotControl::behav2MovCallback, this);
 }
 
 void robotControl::getNameCallback(const std_msgs::String::ConstPtr &model)
@@ -64,6 +64,9 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "movementSimple_moves");
     robotControl *controller = new robotControl();
+
+    //HABILITE ESTA LINHA PARA TESTE INTERNO DO CÓDIGO
+    controller->testMode();
 
     ros::spin();
 
