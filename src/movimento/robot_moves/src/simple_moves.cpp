@@ -26,26 +26,26 @@ void robotControl::getNameCallback(const std_msgs::String::ConstPtr &model)
     return;
 }
 
-void robotControl::behav2MovCallback(const std_msgs::String::ConstPtr &req)
+void robotControl::behav2MovCallback(const robot_moves::Behav_mov::ConstPtr &req)
 { 
-    switch(commandAssociation[req->data]){
+    switch(commandAssociation[req->move]){
         case 1:
-            moveWheels(req->data);
+            moveWheels(req->move);
             break;
         case 2:
-            moveWheels(req->data);
+            moveWheels(req->move);
             break;
         case 3:
-            moveWheels(req->data);
+            moveWheels(req->move);
             break;
         case 4:
-            moveWheels(req->data);
+            moveWheels(req->move);
             break;
         case 5:
-            pageExecution(req->data);
+            pageExecution(req->move);
             break;
         case 6:
-            pageExecution(req->data);
+            pageExecution(req->move);
             break;
         default:
             break;
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     robotControl *controller = new robotControl();
 
     //HABILITE ESTA LINHA PARA TESTE INTERNO DO CÓDIGO
-    controller->testMode();
+    //controller->testMode();
 
     ros::spin();
 

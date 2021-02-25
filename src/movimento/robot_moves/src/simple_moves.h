@@ -5,6 +5,7 @@
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "robot_moves/Behav_mov.h"
 
 #include "robot_moves/set_float.h"
 #include "robot_moves/get_float.h"
@@ -37,7 +38,7 @@ class robotControl{
 
         //Funções apenas prototipadas no header
         void getNameCallback(const std_msgs::String::ConstPtr &model);
-        void behav2MovCallback(const std_msgs::String::ConstPtr &req);
+        void behav2MovCallback(const robot_moves::Behav_mov::ConstPtr &req);
         bool sendPosition(std::string motor, float requisition);
 
         //Funções descritas no header (Descrição de movimentos)

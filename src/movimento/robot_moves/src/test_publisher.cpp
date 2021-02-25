@@ -1,16 +1,16 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
+#include "robot_moves/Behav_mov.h"
 
 int main(int argc, char **argv)
 {
   int count = 0;
-  std_msgs::String msg;
+  robot_moves::Behav_mov msg;
   char opc = ' ';
 
   ros::init(argc, argv, "behaviour_topic_sim");
   ros::NodeHandle n;
   
-  ros::Publisher simPub = n.advertise<std_msgs::String>("behaviour_movimento", 10);
+  ros::Publisher simPub = n.advertise<robot_moves::Behav_mov>("behaviour_movimento", 10);
   ros::Rate loop_rate(10);
 
   while (opc != 'k')
@@ -18,22 +18,22 @@ int main(int argc, char **argv)
     std::cin >> opc;
     switch(opc){
       case 'w':
-        msg.data = "move_forward";
+        msg.move = "move_forward";
         break;
       case 's':
-        msg.data = "walk_back";
+        msg.move = "walk_back";
         break;
       case 'd':
-        msg.data = "rotate_counterclockwise";
+        msg.move = "rotate_counterclockwise";
         break;
       case 'a':
-        msg.data = "rotate_clockwise";
+        msg.move = "rotate_clockwise";
         break;
       case 'p':
-        msg.data = "move_butter";
+        msg.move = "move_butter";
         break;
       case 'i':
-        msg.data = "init_position";
+        msg.move = "init_position";
         break;
       default:
         break;

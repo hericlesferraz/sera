@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs message_generation)
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
+   Behav_mov.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -42,7 +43,7 @@ add_service_files(
 ###################################
 
 catkin_package(
-#  INCLUDE_DIRS include
+# INCLUDE_DIRS include
 #  LIBRARIES robot_moves
    CATKIN_DEPENDS roscpp std_msgs message_runtime
 #  DEPENDS system_lib
