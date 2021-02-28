@@ -18,7 +18,6 @@ def listening_to_behaviour(msg):
 
 # Subscrevendo no tópico da câmera
 def listener():
-
     primeira_iteracao = True
 
     global last_fourteen_manteiga_encontrada
@@ -37,7 +36,7 @@ def listener():
     label = "butter"
     confidence = 0.0
 
-    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence))  
+    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence))
     rospy.spin()
 
 # Função de callback
@@ -61,6 +60,11 @@ def callback(data, tuple):
     print('''Manteiga = {}\nx_centro = {}\ny_centro = {}\nroi_largura = {}\nroi_altura = {}\n'''.format(manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura))
     elapsed_time = time.time() - starting_time
     print("FPS = {}\n".format(1/elapsed_time))
+
+    global rede_neural_ligada
+    if rede_neural_ligada == False:
+        rospy.signal_shutdown("A Rede Neural foi desligada pelo Behaviour!")
+
     cv2.waitKey(1)
 
 def send_message(manteiga_na_bounding_box, x_centro, y_centro, roi_largura, roi_altura):
@@ -127,3 +131,4 @@ while not rospy.is_shutdown():
         rospy.spin()
 
     print("Rede Neural desligada!\n")
+    rospy.init_node('recebeImagemWebots', anonymous = True)
