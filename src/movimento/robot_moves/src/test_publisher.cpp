@@ -1,25 +1,47 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
+#include "robot_moves/Behav_mov.h"
 
 int main(int argc, char **argv)
 {
   int count = 0;
-  std_msgs::String msg;
+  robot_moves::Behav_mov msg;
+  char opc = ' ';
+
   ros::init(argc, argv, "behaviour_topic_sim");
   ros::NodeHandle n;
   
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("behaviour_movimento", 1000);
-  ros::Rate loop_rate(1);
+  ros::Publisher simPub = n.advertise<robot_moves::Behav_mov>("behaviour_movimento", 10);
+  ros::Rate loop_rate(10);
 
-  msg.data = "move_butter";
+  while (opc != 'k')
+  { 
+    std::cin >> opc;
+    switch(opc){
+      case 'w':
+        msg.move = "move_forward";
+        break;
+      case 's':
+        msg.move = "walk_back";
+        break;
+      case 'd':
+        msg.move = "rotate_counterclockwise";
+        break;
+      case 'a':
+        msg.move = "rotate_clockwise";
+        break;
+      case 'p':
+        msg.move = "move_butter";
+        break;
+      case 'i':
+        msg.move = "init_position";
+        break;
+      default:
+        break;
+    }
 
-  while (ros::ok())
-  {
-    chatter_pub.publish(msg);
-    if(count>1000000)msg.data = "move_forward";
-    count++;
-    ros::spinOnce();
+    simPub.publish(msg); 
   }
 
+  ros::spin();
   return 0;
 }
