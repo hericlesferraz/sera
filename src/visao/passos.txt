@@ -14,3 +14,4 @@ rosrun butter_detection getting_frames_and_inferencing.py
 source devel/setup.bash
 roslaunch butter_robot_large_base_urdf butter.launch
 rosrun butter_detection getting_frames_and_inferencing.py
+rosrun robot_moves simple_moves (depois de dar catkin_make)

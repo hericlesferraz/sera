@@ -64,9 +64,9 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "movementSimple_moves");
     robotControl *controller = new robotControl();
-
+	
     //HABILITE ESTA LINHA PARA TESTE INTERNO DO CÓDIGO
-    //controller->testMode();
+    controller->testMode();
 
     ros::spin();
 
