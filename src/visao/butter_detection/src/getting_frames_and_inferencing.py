@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from butter_detection.msg import visparabeh
+from state_machine.msg import Behav_vis
 import os
 import subprocess
 import rospy
@@ -11,9 +12,12 @@ import running_inference as ri
 import time
 import numpy
 
+def listening_to_behaviour(msg):
+    global rede_neural_ligada
+    rede_neural_ligada = msg.rede_neural_ligada
+
 # Subscrevendo no tópico da câmera
 def listener():
-    rospy.init_node('recebeImagemWebots', anonymous = True)
 
     primeira_iteracao = True
 
@@ -108,9 +112,18 @@ for topico in topicos:
 print("Subscrevendo no tópico da câmera:")
 print(topicos[index_topico_camera])
 
+rospy.init_node('recebeImagemWebots', anonymous = True)
+global rede_neural_ligada
+rede_neural_ligada = False
 
-if __name__ == '__main__':
+while not rospy.is_shutdown():
     rede, camadas = ri.ler_rede()
     os.chdir(os.path.join(os.path.expanduser("~"), "darknet"))
 
-    listener()  
+    rospy.Subscriber("behaviour_visao", Behav_vis, listening_to_behaviour)
+
+    if rede_neural_ligada == True:
+        listener()
+        rospy.spin()
+
+    print("Rede Neural desligada!\n")
