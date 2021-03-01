@@ -124,10 +124,10 @@ class Robot(object):
 
     def alignment(self):
         #*Confere o alinhamento da manteiga em ralação ao centro da robô
-        if(self.x_centro > 0):
+        if(self.x_centro > 258):
             print('Alinhamento da manteiga para direita\n')
             return 'direita'
-        elif(self.x_centro < 0):
+        elif(self.x_centro < 158):
             print('Alinhamento da manteiga para esquerda\n')
             return 'esquerda'
         else:
@@ -136,7 +136,7 @@ class Robot(object):
     
     def close_enough(self):
         #*Confere se a manteiga está perto o suficiente
-        if(self.roi_largura > 5):
+        if(self.roi_largura > 250):
             print('Manteiga perto o suficiente\n')
             return True
         else:
@@ -158,6 +158,7 @@ class Robot(object):
 def brain():
     robot = Robot('passador de manteiga')
     while not rospy.is_shutdown():
+        time.sleep(1)
         robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
         robot.publishToMov() #Publicando variáveis para o movimento
         robot.publishToVis() #Publicando variáveis para a visão
