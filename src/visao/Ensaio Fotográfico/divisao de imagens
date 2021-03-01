@@ -1,0 +1,13 @@
+============ANTES=============
+220 frames total
+44 eval (20%)
+24 val (11%)
+152 train (69%)
+
+
+============SÓ AS NOVAS========
+260 frames total
+179 train (69%)
+29 val (11%)
+52 eval (20%)
+
