@@ -20,28 +20,28 @@ def listening_to_behaviour(msg):
 def listener():
     primeira_iteracao = True
 
-    global last_fourteen_manteiga_encontrada
-    global last_fourteen_x_centro
-    global last_fourteen_y_centro
-    global last_fourteen_roi_largura
-    global last_fourteen_roi_altura
+    global last_seven_manteiga_encontrada
+    global last_seven_x_centro
+    global last_seven_y_centro
+    global last_seven_roi_largura
+    global last_seven_roi_altura
     global label
     global confidence
 
-    last_fourteen_manteiga_encontrada = np.full(14, False)
-    last_fourteen_x_centro = np.full(14, 0, dtype = np.int16)
-    last_fourteen_y_centro = np.full(14, 0, dtype = np.int16)
-    last_fourteen_roi_largura = np.full(14, 0, dtype = np.int16)
-    last_fourteen_roi_altura = np.full(14, 0, dtype = np.int16)
+    last_seven_manteiga_encontrada = np.full(7, False)
+    last_seven_x_centro = np.full(7, 0, dtype = np.int16)
+    last_seven_y_centro = np.full(7, 0, dtype = np.int16)
+    last_seven_roi_largura = np.full(7, 0, dtype = np.int16)
+    last_seven_roi_altura = np.full(7, 0, dtype = np.int16)
     label = "butter"
     confidence = 0.0
 
-    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence))
+    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura, label, confidence))
     rospy.spin()
 
 # Função de callback
 def callback(data, tuple):
-    primeira_iteracao, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence = tuple[:]
+    primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura, label, confidence = tuple[:]
     starting_time = time.time()
     bridge = CvBridge()
     cv_image = bridge.imgmsg_to_cv2(data, desired_encoding='bgr8')
@@ -49,11 +49,11 @@ def callback(data, tuple):
 
     manteiga_encontrada, x_centro, y_centro, roi_largura, roi_altura, label, confidence = ri.rodando_rede(rede_configurada, camadas, label, confidence)
 
-    last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura = ri.organizando_array(last_fourteen_manteiga_encontrada, manteiga_encontrada, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura)
-    frame, last_fourteen_manteiga_encontrada, manteiga_na_bounding_box, last_fourteen_x_centro, x_centro, last_fourteen_y_centro, y_centro, last_fourteen_roi_largura, roi_largura, last_fourteen_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_fourteen_manteiga_encontrada, last_fourteen_x_centro, last_fourteen_y_centro, last_fourteen_roi_largura, last_fourteen_roi_altura, label, confidence)
+    last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura = ri.organizando_array(last_seven_manteiga_encontrada, manteiga_encontrada, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura)
+    frame, last_seven_manteiga_encontrada, manteiga_na_bounding_box, last_seven_x_centro, x_centro, last_seven_y_centro, y_centro, last_seven_roi_largura, roi_largura, last_seven_roi_altura, roi_altura = ri.fazendo_media_e_desenhando_bb(cv_image, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura, label, confidence)
 
-    print(last_fourteen_manteiga_encontrada)
-    print(last_fourteen_x_centro)
+    print(last_seven_manteiga_encontrada)
+    print(last_seven_x_centro)
 
     cv2.imshow("Camera", frame)
     send_message(manteiga_na_bounding_box, x_centro, y_centro, roi_largura, roi_altura)

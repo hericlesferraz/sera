@@ -82,7 +82,6 @@ class Robot(object):
 
     #*PUBLISHER PARA A VISÃO
     def publishToVis(self):
-        print(self.rede_neural_ligada)
         msg_vis = Behav_vis()
         msg_vis.rede_neural_ligada = self.rede_neural_ligada
         self.pubVis.publish(msg_vis)
@@ -126,10 +125,10 @@ class Robot(object):
 
     def alignment(self):
         #*Confere o alinhamento da manteiga em ralação ao centro da robô
-        if(self.x_centro > 258):
+        if(self.x_centro > 50):
             print('Alinhamento da manteiga para direita\n')
             return 'direita'
-        elif(self.x_centro < 158):
+        elif(self.x_centro < -50):
             print('Alinhamento da manteiga para esquerda\n')
             return 'esquerda'
         else:
@@ -160,13 +159,13 @@ class Robot(object):
 def brain():
     robot = Robot('passador de manteiga')
     while not rospy.is_shutdown():
-        time.sleep(1)
-        robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
+        #time.sleep(1)
+        os.system('clear') #Limpando o terminal
+        #robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
         robot.publishToMov() #Publicando variáveis para o movimento
         robot.publishToVis() #Publicando variáveis para a visão
         robot.toString() #Exibindo no terminal as variáveis
         if(robot.state == 'ligar'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             print('Iniciando behaviour...\n')
             robot.connect_neural_network() #Chamando método que liga a rede neural
@@ -174,13 +173,11 @@ def brain():
             robot.wake_up()
 
         elif(robot.state == 'crise_existencial'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             print('Tendo uma crise existencial!\n')
             robot.where_butter()
 
         elif(robot.state == 'procurar_por_manteiga'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             print('Procurando manteiga..\n')
             robot.rotate_time() #Chamando método que rotaciona a robô sentido horário
@@ -188,7 +185,6 @@ def brain():
                 robot.seeking_the_butter()
 
         elif(robot.state == 'buscar_manteiga'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             alignment = robot.alignment()
             if(alignment == 'direita'):
@@ -202,14 +198,12 @@ def brain():
                     robot.move_forward()
 
         elif(robot.state == 'passar_manteiga'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             robot.butter() #Chamando método que busca o movimento de passar manteiga
             robot.turn_off_neural_network() #Chamando método que desliga a rede neural
             robot.sleep()
 
         elif(robot.state == 'desligar'):
-            os.system('clear') #Limpando o terminal
             print('------ESTADO ATUAL:' + robot.state + '------\n\n')
             print('Objetivo concluído!')
             time.sleep(3)
@@ -217,6 +211,7 @@ def brain():
 
         else:
             break
+        
 
 def main():
     rospy.init_node('state_node', anonymous=True)

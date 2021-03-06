@@ -11,7 +11,7 @@
 #include "robot_moves/get_float.h"
 
 #define translateAdd 3.141592*2;
-#define rotationAdd 1.256;
+#define rotationAdd 1.256/3;
 
 class robotControl{
     private:
