@@ -37,6 +37,8 @@ class Robot(object):
         self.rede_neural_ligada = False 
         self.movimento = 'init_position'
 
+        
+
         # Iniciliza a maquina de estados
         self.machine = Machine(model=self, states=Robot.states, initial='ligar')
 

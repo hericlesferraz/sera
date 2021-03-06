@@ -5,6 +5,7 @@ import pygame
 import sys
 import time
 import rospy
+import os
 
 from butter_detection.msg import visparabeh
 from pygame.locals import *
@@ -21,7 +22,7 @@ class Ballsim(object):
         self.fpsClock=pygame.time.Clock()
 
         ##Tamanho do display
-        self.size = (640, 480)
+        self.size = (416, 416)
 
         ##Cria o display
         self.DISPLAYSURF=pygame.display.set_mode(self.size)
@@ -30,13 +31,15 @@ class Ballsim(object):
         pygame.display.set_caption('Behaviour_test')
 
         ##Carregando a imagem do fundo
+        pasta_img = os.path.join(os.path.expanduser('~'), 'sera/src/behaviour/ballsim/img')
+        pasta_atual = os.getcwd()
+        os.chdir(pasta_img)
         self.background = pygame.image.load('background.jpg')
 
         ##Carrega a imagem que vai mexer
         self.coord = pygame.image.load('bola2.png')
+        os.chdir(pasta_atual)
 
-        ##quando direction=None a imagem ficará parada
-        self.direction=None
 
         ''' coord_x e coord_y são as coordenadas iniciais da imagem que iremos movimentar, onde 
             (0,0) é o canto superior esquerdo e os eixos crescem para a direita e para baixo'''
@@ -49,7 +52,7 @@ class Ballsim(object):
         self.execute()
 
     def execute(self):
-        while True:
+        while not rospy.is_shutdown():
             ##'Desenha' o display
             self.DISPLAYSURF.blit(self.background,(0,0))
             self.DISPLAYSURF.blit(self.coord,(self.coord_x,self.coord_y))
@@ -65,15 +68,19 @@ class Ballsim(object):
                     sys.exit()
 
                 if event.type == pygame.KEYDOWN:
-                    self.direction = event.key
+                    self.key = event.key
+                    if self.key == pygame.K_i or self.key == pygame.K_o:
+                        self.scale()
+                    elif self.key == pygame.K_0:
+                        self.center()
+                    else:
+                        ##atualiza as coordenadas
+                        self.coord_x, self.coord_y = self.move()
                         
                 if event.type == pygame.KEYUP:
-                    if (event.key == self.direction):
-                        self.direction = None
+                    if (event.key == self.key):
+                        self.key = None
             
-            ##atualiza as coordenadas
-            self.coord_x, self.coord_y = self.move()
-
             #Atualiza o found
             if(self.coord_x < -self.imageWidth or self.coord_y < -self.imageHeight or self.coord_x > self.size[0] or self.coord_y > self.size[1]):
                 self.found = False
@@ -84,20 +91,39 @@ class Ballsim(object):
             self.fpsClock.tick(self.FPS)
             self.publish()
 
+    def scale(self):
+        if self.key == pygame.K_i:
+            self.imageHeight += 50
+            self.imageWidth += 50
+            self.coord = pygame.transform.scale(self.coord, (self.imageWidth, self.imageHeight))
+        elif self.key == pygame.K_o:
+            self.imageHeight -= 50
+            self.imageWidth -= 50
+            try:
+                self.coord = pygame.transform.scale(self.coord, (self.imageWidth, self.imageHeight))
+            except Exception:
+                self.imageHeight += 50
+                self.imageWidth += 50
+                pass
+
+    def center(self):
+        self.coord_x = int((self.size[0]/2)) - int((self.imageWidth)/2)
+        self.coord_y = int((self.size[1]/2)) - int((self.imageHeight)/2)
+
     def move(self):
         ''' pygame tem as constantes padrões pras teclas;
             essas que eu usei são correspondentes as setinhas do teclado '''
-        if self.direction:
-            if self.direction == pygame.K_UP:
+        if self.key:
+            if self.key == pygame.K_UP:
                 self.coord_y -= 20
                 
-            elif self.direction == pygame.K_DOWN:
+            elif self.key == pygame.K_DOWN:
                 self.coord_y += 20
                 
-            if self.direction == pygame.K_LEFT:
+            if self.key == pygame.K_LEFT:
                 self.coord_x -= 20
                 
-            elif self.direction == pygame.K_RIGHT:
+            elif self.key == pygame.K_RIGHT:
                 self.coord_x += 20
                 
         return self.coord_x, self.coord_y
@@ -106,8 +132,8 @@ class Ballsim(object):
         msg = visparabeh()
         msg.roi_altura = self.imageHeight
         msg.roi_largura = self.imageWidth
-        msg.x_centro = self.coord_x + int((self.imageWidth)/2)
-        msg.y_centro = self.coord_y + int((self.imageHeight)/2)
+        msg.x_centro = self.coord_x + int((self.imageWidth)/2) - int((self.size[0]/2))
+        msg.y_centro = self.coord_y + int((self.imageHeight)/2) - int((self.size[1]/2))
         msg.manteiga_encontrada = self.found
 
         self.pub.publish(msg)
