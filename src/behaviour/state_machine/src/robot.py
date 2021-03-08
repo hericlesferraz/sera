@@ -159,9 +159,9 @@ class Robot(object):
 def brain():
     robot = Robot('passador de manteiga')
     while not rospy.is_shutdown():
-        #time.sleep(1)
+        time.sleep(2)
         os.system('clear') #Limpando o terminal
-        #robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
+        robot.checkEssentialParam() #Conferindo se os parâmetros essenciais estão corretos
         robot.publishToMov() #Publicando variáveis para o movimento
         robot.publishToVis() #Publicando variáveis para a visão
         robot.toString() #Exibindo no terminal as variáveis
