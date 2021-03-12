@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+from std_msgs.msg import String
+from butter_detection.srv import set_int as SrvEnableCamera
 from butter_detection.msg import visparabeh
 from state_machine.msg import Behav_vis
 import os
@@ -11,6 +13,23 @@ import numpy as np
 import running_inference as ri
 import time
 import numpy
+
+def listening_to_webots(msg):
+    global robot_name
+    robot_name = msg.data
+
+def enable_camera_service():
+    global robot_name
+    service_name = "/" + robot_name + "/cam_Link/enable"
+    rospy.wait_for_service(service_name)
+
+    try:
+        enable_camera_client = rospy.ServiceProxy(service_name, SrvEnableCamera)
+        ret = enable_camera_client(1)
+        return ret.success
+
+    except rospy.ServiceException as E:
+        print("Service call failed: %s"%E)
 
 def listening_to_behaviour(msg):
     global rede_neural_ligada
@@ -36,7 +55,10 @@ def listener():
     label = "butter"
     confidence = 0.0
 
-    rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura, label, confidence))
+    global robot_name
+    camera_topic = "/" + robot_name + "/cam_Link/image" 
+
+    rospy.Subscriber(camera_topic, TipoMensagemImagem, callback, callback_args=(primeira_iteracao, last_seven_manteiga_encontrada, last_seven_x_centro, last_seven_y_centro, last_seven_roi_largura, last_seven_roi_altura, label, confidence))
     rospy.spin()
 
 # Função de callback
@@ -79,44 +101,26 @@ def send_message(manteiga_na_bounding_box, x_centro, y_centro, roi_largura, roi_
 
     message_publisher.publish(message)
 
+# Inicializando o nó
+rospy.init_node('visao', anonymous = True)
 
-# Obtendo todos os serviços em funcionamento no momento
-servicos = subprocess.check_output("rosservice list", shell = True)
-servicos = servicos.decode('ascii')
-servicos = servicos.split("\n")
-print(servicos)
-print()
+# Obtendo o nome do nó do Webots
+global robot_name
+robot_name = ''
+model_name_topic = rospy.Subscriber("model_name", String, listening_to_webots)
 
-# Obtendo o serviço da câmera e dando enable
-ind = 0
-index_servico_camera = 0
-for servico in servicos:
-    if "cam_Link/enable" in servico:
-        index_servico_camera = ind
-    ind += 1
-print("Fornecendo True para o serviço camera/enable:")
-print(servicos[index_servico_camera])
-os.system('rosservice call {} "value: 1"'.format(servicos[index_servico_camera]))
+while robot_name == '':
+    continue
 
-# Obtendo todos os tópicos em funcionamento no momento
-topicos = subprocess.check_output("rostopic list", shell = True)
-topicos = topicos.decode('ascii')
-topicos = topicos.split("\n")
-print()
-print(topicos)
-print()
+# Desinscrevendo do tópico que transmite o nó do Webots
+model_name_topic.unregister()
 
-# Obtendo o tópico da câmera para se subscrever
-ind = 0
-index_topico_camera = 0
-for topico in topicos:
-    if "cam_Link/image" in topico:
-        index_topico_camera = ind
-    ind += 1
-print("Subscrevendo no tópico da câmera:")
-print(topicos[index_topico_camera])
+# Habilitando a câmera do robô no Webots
+camera_enabled = False
+while not camera_enabled:
+    camera_enabled = enable_camera_service()
 
-rospy.init_node('recebeImagemWebots', anonymous = True)
+
 global rede_neural_ligada
 rede_neural_ligada = False
 
@@ -131,4 +135,4 @@ while not rospy.is_shutdown():
         rospy.spin()
 
     print("Rede Neural desligada!\n")
-    rospy.init_node('recebeImagemWebots', anonymous = True)
+    rospy.init_node('visao', anonymous = True)
