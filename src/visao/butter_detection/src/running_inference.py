@@ -6,7 +6,12 @@ import numpy as np
 # Lendo a rede neural com o OpenCV
 def ler_rede():
     os.chdir(os.path.join(os.path.expanduser("~"), "sera/src/visao/butter_detection/src"))
-    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_best.weights", "darknet")
+    
+    # Rede treinada com modelo 1080p + imagens reais
+    #net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_best.weights", "darknet")
+    
+    # Rede treinada com modelo 416x416
+    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_1000.weights", "darknet")
     outNames = net.getUnconnectedOutLayersNames()
     os.chdir("..")
 
