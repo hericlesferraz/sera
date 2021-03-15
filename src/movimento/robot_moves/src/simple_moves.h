@@ -42,8 +42,8 @@ class robotControl{
         bool sendPosition(std::string motor, float requisition);
 
         //Funções descritas no header (Descrição de movimentos)
-        bool moveMotor(std::string motor, bool request){
-            if(motor == "wheel_left_front" || motor == "wheel_left_back" || motor == "wheel_right_front" || motor == "wheel_right_back"){
+        bool moveMotor(std::string motor, std::string movement, bool request){
+            if(movement == "move_forward" || movement == "walk_back"){
                 add = translateAdd;
             }else 
                 add = rotationAdd;
@@ -57,32 +57,32 @@ class robotControl{
 
         void moveWheels(std::string movement){
             if(movement == "move_forward"){
-                moveMotor("wheel_left_front",1);
-                moveMotor("wheel_left_back",1);
+                moveMotor("wheel_left_front",movement,1);
+                moveMotor("wheel_left_back",movement,1);
 
-                moveMotor("wheel_right_front",0);
-                moveMotor("wheel_right_back",0);                
+                moveMotor("wheel_right_front",movement,0);
+                moveMotor("wheel_right_back",movement,0);                
             }
             if(movement == "walk_back"){
-                moveMotor("wheel_left_front",0);
-                moveMotor("wheel_left_back",0);
+                moveMotor("wheel_left_front",movement,0);
+                moveMotor("wheel_left_back",movement,0);
 
-                moveMotor("wheel_right_front",1);
-                moveMotor("wheel_right_back",1);                
+                moveMotor("wheel_right_front",movement,1);
+                moveMotor("wheel_right_back",movement,1);                
             }
             if(movement == "rotate_clockwise"){
-                moveMotor("wheel_left_front",1);
-                moveMotor("wheel_left_back",1);
+                moveMotor("wheel_left_front",movement,1);
+                moveMotor("wheel_left_back",movement,1);
 
-                moveMotor("wheel_right_front",1);
-                moveMotor("wheel_right_back",1);                
+                moveMotor("wheel_right_front",movement,1);
+                moveMotor("wheel_right_back",movement,1);                
             }
             if(movement == "rotate_counterclockwise"){
-                moveMotor("wheel_left_front",0);
-                moveMotor("wheel_left_back",0);
+                moveMotor("wheel_left_front",movement,0);
+                moveMotor("wheel_left_back",movement,0);
 
-                moveMotor("wheel_right_front",0);
-                moveMotor("wheel_right_back",0);                
+                moveMotor("wheel_right_front",movement,0);
+                moveMotor("wheel_right_back",movement,0);                
             }
             return;
         }
