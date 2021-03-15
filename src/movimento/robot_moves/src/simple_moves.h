@@ -10,7 +10,7 @@
 #include "robot_moves/set_float.h"
 #include "robot_moves/get_float.h"
 
-#define translateAdd 3.141592*8;
+#define translateAdd 3.141592*2;
 #define rotationAdd 1.256/3;
 
 class robotControl{
@@ -43,7 +43,7 @@ class robotControl{
 
         //Funções descritas no header (Descrição de movimentos)
         bool moveMotor(std::string motor, bool request){
-            if(motor == "move_forward" || motor == "walk_back"){
+            if(motor == "wheel_left_front" || motor == "wheel_left_back" || motor == "wheel_right_front" || motor == "wheel_right_back"){
                 add = translateAdd;
             }else 
                 add = rotationAdd;
