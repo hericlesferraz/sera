@@ -89,8 +89,6 @@ class robotControl{
 
         void pageExecution(std::string page){
             if(page == "move_butter"){
-                sendPosition("body",0.174);
-
                 sendPosition("shoulder_left",2.6);
                 sendPosition("shoulder_right",0.39);
 
@@ -102,7 +100,7 @@ class robotControl{
 
             }
             if(page == "init_position"){
-                sendPosition("body",0);
+                sendPosition("body",0.174);
 
                 sendPosition("shoulder_left",3);
                 sendPosition("shoulder_right",0);

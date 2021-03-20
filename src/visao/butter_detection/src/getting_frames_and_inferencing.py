@@ -126,7 +126,7 @@ rede_neural_ligada = False
 
 while not rospy.is_shutdown():
     rede, camadas = ri.ler_rede()
-    os.chdir(os.path.join(os.path.expanduser("~"), "darknet"))
+    #os.chdir(os.path.join(os.path.expanduser("~"), "darknet"))
 
     rospy.Subscriber("behaviour_visao", Behav_vis, listening_to_behaviour)
 
