@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     robotControl *controller = new robotControl();
 	
     //HABILITE ESTA LINHA PARA TESTE INTERNO DO CÓDIGO
-    //controller->testMode();
+    controller->testMode();
 
     ros::spin();
 

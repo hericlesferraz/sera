@@ -9,7 +9,7 @@ import cv2
 class Listener():
     def __init__(self):
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        self.escritor = cv2.VideoWriter(os.path.join(os.path.expanduser('~'), 'sera/src/visao/Ensaio Fotográfico 2/') + 'film.avi', fourcc, 30.0, (416, 416))
+        self.escritor = cv2.VideoWriter(os.path.join(os.path.expanduser('~'), 'sera/src/visao/Ensaio Fotográfico 2 - Reforço Longe e Perto/') + 'film.avi', fourcc, 30.0, (416, 416))
 
         rospy.init_node('recebeImagemWebots', anonymous = True)
         rospy.Subscriber(topicos[index_topico_camera], TipoMensagemImagem, self.callback)  
