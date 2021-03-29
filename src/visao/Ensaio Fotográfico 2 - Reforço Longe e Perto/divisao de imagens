@@ -1,0 +1,11 @@
+============DATASET ORIGINAL (416x416, câmera do robô)========
+490 frames total
+338 train (69%)
+54 val (11%)
+98 eval (20%)
+
+============DATASET REFORÇO (416x416, câmera do robô, apenas longe e perto)========
+350 frames total
+242 train (69%)
+39 val (11%)
+69 eval (20%)

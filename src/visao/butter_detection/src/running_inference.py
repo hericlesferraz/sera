@@ -11,7 +11,7 @@ def ler_rede():
     #net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_best.weights", "darknet")
     
     # Rede treinada com modelo 416x416
-    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_1000.weights", "darknet")
+    net = cv2.dnn.readNet("yolov4-tiny-obj.cfg", "yolov4-tiny-obj_best.weights", "darknet")
     outNames = net.getUnconnectedOutLayersNames()
     os.chdir("..")
 
