@@ -1,5 +1,0 @@
-FAZER MÉDIA DOS ÚLTIMOS 7 RESULTADOS DE DETECÇÃO:
-manteiga_encontrada = True se nas últimas 7 detecções uma delas for positiva.
-
-
-Pegar todos os valores -1 das arrays last_seven e substituir pela média dos outros valores
