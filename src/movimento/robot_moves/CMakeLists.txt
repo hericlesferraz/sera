@@ -64,10 +64,6 @@ add_executable(simple_moves src/simple_moves.cpp)
 add_dependencies(simple_moves robot_moves_generate_messages_cpp)
 target_link_libraries(simple_moves ${catkin_LIBRARIES})
 
-add_executable(test_publisher  src/test_publisher.cpp)
-add_dependencies(test_publisher  robot_moves_generate_messages_cpp)
-target_link_libraries(test_publisher  ${catkin_LIBRARIES})
-
 #############
 ## Install ##
 #############
