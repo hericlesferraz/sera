@@ -47,6 +47,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
+   Behav_mov.msg
 #   Message1.msg
 #   Message2.msg
  )

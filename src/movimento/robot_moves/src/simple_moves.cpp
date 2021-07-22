@@ -8,18 +8,26 @@ robotControl::robotControl()
     }
     getName.shutdown();
 
-    sendRequisitionFloat.request.value = 2;
+    sendRequisitionFloat.request.value = 10;
     for(int i = 0; i < 11; i++){
         velocityClient = nh.serviceClient<robot_moves::set_float>(robotName+"/"+motorNames[i]+"/set_velocity");
         velocityClient.call(sendRequisitionFloat);
     }
 
     getFloat.request.ask = true;
+
+    behav2Mov = nh.subscribe("behaviour_movimento", 10, &robotControl::behav2MovCallback, this);
 }
 
 void robotControl::getNameCallback(const std_msgs::String::ConstPtr &model)
 {
     robotName = model->data.c_str();
+    return;
+}
+
+void robotControl::behav2MovCallback(const robot_moves::Behav_mov::ConstPtr &message)
+{
+    execMove(message->move);
     return;
 }
 
@@ -32,12 +40,18 @@ bool robotControl::sendPosition(std::string motor, float requisition)
     return positionClient.call(sendRequisitionFloat);
 }
 
-bool robotControl::moveWheels(std::string wheel, bool request){
+bool robotControl::moveWheels(std::string wheel, bool request, std::string movement)
+{
+    if(movement == "move_forward" || movement == "walk_back")
+    {
+        add = translateAdd;
+    }else 
+        add = rotationAdd;
 
     gpositionClient = nh.serviceClient<robot_moves::get_float>("/"+robotName+"/"+wheel+"/get_target_position");
     gpositionClient.call(getFloat);
 
-    getFloat.response.value += (request) ? 3.14/4 : -3.14/4;
+    getFloat.response.value += (request) ? add : -add;
     
     return sendPosition(wheel , getFloat.response.value);
 } 
@@ -48,14 +62,7 @@ int main(int argc, char **argv)
 
     robotControl *controller = new robotControl();
 
-    for(int i = 0; i < 100; i++)
-    {
-        controller->moveWheels("wheel_left_front",1);
-        controller->moveWheels("wheel_left_back",1);
-
-        controller->moveWheels("wheel_right_front",1);
-        controller->moveWheels("wheel_right_back",1);
-    }
+    //controller->testMode();
 
     ros::spin();
 
